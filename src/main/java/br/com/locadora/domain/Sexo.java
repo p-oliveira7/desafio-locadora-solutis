@@ -1,4 +1,4 @@
-package br.com.locadora.entity;
+package br.com.locadora.domain;
 
 import lombok.Getter;
 
