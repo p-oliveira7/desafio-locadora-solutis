@@ -1,6 +1,6 @@
-package br.com.locadora.repositories;
+package br.com.locadora.api.repositories;
 
-import br.com.locadora.domain.pessoa.Pessoa;
+import br.com.locadora.api.domain.pessoa.Pessoa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,8 +1,8 @@
-package br.com.locadora.controllers;
+package br.com.locadora.api.controllers;
 
-import br.com.locadora.domain.pessoa.Pessoa;
-import br.com.locadora.domain.pessoa.PessoaDTO;
-import br.com.locadora.services.PessoaService;
+import br.com.locadora.api.services.PessoaService;
+import br.com.locadora.api.domain.pessoa.Pessoa;
+import br.com.locadora.api.domain.pessoa.PessoaDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,10 +1,10 @@
-package br.com.locadora.services;
+package br.com.locadora.api.services;
 
-import br.com.locadora.domain.pessoa.Funcionario;
-import br.com.locadora.domain.pessoa.Motorista;
-import br.com.locadora.domain.pessoa.Pessoa;
-import br.com.locadora.domain.pessoa.PessoaDTO;
-import br.com.locadora.repositories.PessoaRepository;
+import br.com.locadora.api.domain.pessoa.Funcionario;
+import br.com.locadora.api.domain.pessoa.Motorista;
+import br.com.locadora.api.domain.pessoa.Pessoa;
+import br.com.locadora.api.domain.pessoa.PessoaDTO;
+import br.com.locadora.api.repositories.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
