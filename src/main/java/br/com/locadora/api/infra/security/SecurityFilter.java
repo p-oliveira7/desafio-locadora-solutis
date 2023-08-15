@@ -1,4 +1,4 @@
-package br.com.locadora.api.security;
+package br.com.locadora.api.infra.security;
 
 import br.com.locadora.api.domain.usuario.UsuarioRepository;
 import jakarta.servlet.FilterChain;

@@ -1,4 +1,4 @@
-package br.com.locadora.api.security;
+package br.com.locadora.api.infra.security;
 import br.com.locadora.api.domain.usuario.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -1,4 +1,5 @@
 package br.com.locadora.api.domain.usuario;
+import br.com.locadora.api.domain.pessoa.Pessoa;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -21,8 +22,14 @@ public class Usuario implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String email;
+
     private String senha;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
 
     public Usuario(String email, String senha) {
         this.email = email;

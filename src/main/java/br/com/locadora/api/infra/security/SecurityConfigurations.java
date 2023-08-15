@@ -1,4 +1,4 @@
-package br.com.locadora.api.security;
+package br.com.locadora.api.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
