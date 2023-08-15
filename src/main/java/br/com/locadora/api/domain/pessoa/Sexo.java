@@ -1,4 +1,4 @@
-package br.com.locadora.domain.pessoa;
+package br.com.locadora.api.domain.pessoa;
 
 import lombok.Getter;
 
