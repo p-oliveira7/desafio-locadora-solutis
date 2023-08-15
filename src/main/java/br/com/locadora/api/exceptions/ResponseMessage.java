@@ -1,4 +1,4 @@
-package br.com.locadora.exceptions;
+package br.com.locadora.api.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

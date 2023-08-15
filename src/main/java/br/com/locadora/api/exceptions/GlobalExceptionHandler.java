@@ -1,4 +1,4 @@
-package br.com.locadora.exceptions;
+package br.com.locadora.api.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;

@@ -1,16 +1,8 @@
 package br.com.locadora.api.services;
 
-<<<<<<< Updated upstream:src/main/java/br/com/locadora/api/services/PessoaService.java
-import br.com.locadora.api.domain.pessoa.Funcionario;
-import br.com.locadora.api.domain.pessoa.Motorista;
-import br.com.locadora.api.domain.pessoa.Pessoa;
-import br.com.locadora.api.domain.pessoa.PessoaDTO;
+import br.com.locadora.api.domain.pessoa.*;
 import br.com.locadora.api.repositories.PessoaRepository;
-=======
-import br.com.locadora.domain.pessoa.*;
-import br.com.locadora.repositories.PessoaRepository;
 import jakarta.persistence.EntityNotFoundException;
->>>>>>> Stashed changes:src/main/java/br/com/locadora/services/PessoaService.java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
