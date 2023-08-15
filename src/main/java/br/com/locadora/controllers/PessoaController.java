@@ -1,14 +1,12 @@
 package br.com.locadora.controllers;
 
-import br.com.locadora.domain.Pessoa;
-import br.com.locadora.domain.PessoaDTO;
+import br.com.locadora.domain.pessoa.Pessoa;
+import br.com.locadora.domain.pessoa.PessoaDTO;
 import br.com.locadora.services.PessoaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/locadora/")

@@ -1,4 +1,4 @@
-package br.com.locadora.domain;
+package br.com.locadora.domain.pessoa;
 
 import jakarta.persistence.*;
 import lombok.*;

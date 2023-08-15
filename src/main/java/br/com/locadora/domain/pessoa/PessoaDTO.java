@@ -1,4 +1,4 @@
-package br.com.locadora.domain;
+package br.com.locadora.domain.pessoa;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

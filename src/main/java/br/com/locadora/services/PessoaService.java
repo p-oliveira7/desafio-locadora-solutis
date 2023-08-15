@@ -1,16 +1,14 @@
 package br.com.locadora.services;
 
-import br.com.locadora.domain.Funcionario;
-import br.com.locadora.domain.Motorista;
-import br.com.locadora.domain.Pessoa;
-import br.com.locadora.domain.PessoaDTO;
+import br.com.locadora.domain.pessoa.Funcionario;
+import br.com.locadora.domain.pessoa.Motorista;
+import br.com.locadora.domain.pessoa.Pessoa;
+import br.com.locadora.domain.pessoa.PessoaDTO;
 import br.com.locadora.repositories.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static br.com.locadora.domain.Funcionario.*;
 
 @Service
 public class PessoaService {
