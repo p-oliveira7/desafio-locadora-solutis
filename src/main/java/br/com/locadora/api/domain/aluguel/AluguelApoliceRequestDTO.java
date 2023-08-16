@@ -1,12 +1,14 @@
 package br.com.locadora.api.domain.aluguel;
 
+import br.com.locadora.api.domain.apolice.ApoliceSeguroRequestDTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
-public record AluguelApoliceInputDTO(
+public record AluguelApoliceRequestDTO(
         @NotNull
         Calendar dataPedido,
         @NotNull
@@ -14,12 +16,9 @@ public record AluguelApoliceInputDTO(
         @NotNull
         Date dataDevolucao,
         @NotNull
-        BigDecimal valorFranquia,
+        @Valid
+        ApoliceSeguroRequestDTO apolice,
         @NotNull
-        Boolean protecaoTerceiro,
-        @NotNull
-        Boolean protecaoCausaNatural,
-        @NotNull
-        Boolean protecaoRoubo
+        Long idCarro
 ) {
 }

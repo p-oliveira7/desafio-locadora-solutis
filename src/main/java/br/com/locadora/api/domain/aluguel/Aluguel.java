@@ -1,5 +1,7 @@
 package br.com.locadora.api.domain.aluguel;
 
+import br.com.locadora.api.domain.apolice.ApoliceSeguro;
+import br.com.locadora.api.domain.carro.Carro;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,17 +26,20 @@ public class Aluguel {
     private Date dataEntrega;
 
     private Date dataDevolucao;
-    // Falta o Carro
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true) // Pode ser ou não bidirecional
-    @JoinColumn(name = "apolice_id")
+    @Embedded
     private ApoliceSeguro apoliceSeguro;
 
-    public Aluguel(Calendar dataPedido, Date dataEntrega, Date dataDevolucao, BigDecimal valorFranquia,
-                   Boolean protecaoTerceiro, Boolean protecaoCausaNatural, Boolean protecaoRoubo) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "carro_id")
+    private Carro carro;
 
-        this.dataPedido = dataPedido;
-        this.dataEntrega = dataEntrega;
-        this.dataDevolucao = dataDevolucao;
+    public Aluguel(AluguelApoliceRequestDTO dados, Carro carro) {
+        this.dataPedido = dados.dataPedido();
+        this.dataEntrega = dados.dataEntrega();
+        this.dataDevolucao = dados.dataDevolucao();
+        this.apoliceSeguro = new ApoliceSeguro(dados.apolice());
+        this.carro = carro;
     }
+
 }

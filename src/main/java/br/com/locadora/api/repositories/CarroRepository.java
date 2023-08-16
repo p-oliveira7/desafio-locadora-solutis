@@ -6,4 +6,5 @@ import br.com.locadora.api.domain.carro.*;
 
 @Repository
 public interface CarroRepository extends JpaRepository<Carro, Long> {
+    Carro findCarroById(Long id);
 }
