@@ -1,6 +1,5 @@
 package br.com.locadora.api.controllers;
 
-import br.com.locadora.api.domain.pessoa.Pessoa;
 import br.com.locadora.api.domain.pessoa.PessoaDTO;
 import br.com.locadora.api.exceptions.ResponseMessage;
 import br.com.locadora.api.services.PessoaService;
@@ -17,6 +16,7 @@ public class PessoaController {
 
     @GetMapping("/pessoas")
     public ResponseEntity<Object> findAll() {
+        // TODO: usar a mesma lógica de que deve enviar a pessoaDTO
         var pessoas = pessoaService.findAll();
         return ResponseEntity.ok(pessoas);
     }
@@ -28,7 +28,7 @@ public class PessoaController {
     }
 
     @PutMapping("/pessoas")
-    public ResponseEntity<Object> atualizarPessoa(@RequestBody Pessoa pessoaAtualizada) {
+    public ResponseEntity<Object> atualizarPessoa(@RequestBody PessoaDTO pessoaAtualizada) {
         pessoaService.atualizarPessoa(pessoaAtualizada);
         return ResponseEntity.ok(new ResponseMessage("Cadastro atualizado com sucesso."));
     }

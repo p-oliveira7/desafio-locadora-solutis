@@ -26,25 +26,25 @@ public class PessoaService {
     private Pessoa converterDTOparaEntidade(PessoaDTO pessoaDTO) {
         Pessoa pessoa;
 
-        if (pessoaDTO.getMatricula() != null) {
+        if (pessoaDTO.matricula() != null) {
             pessoa = new Funcionario();
-        } else if (pessoaDTO.getNumeroCNH() != null) {
+        } else if (pessoaDTO.numeroCNH() != null) {
             pessoa = new Motorista();
         } else {
             pessoa = new Pessoa();
         }
 
         try {
-            LocalDate dataDeNascimento = converterData(pessoaDTO.getDataDeNascimento());
+            LocalDate dataDeNascimento = converterData(pessoaDTO.dataDeNascimento());
             pessoa.setDataDeNascimento(dataDeNascimento);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Data de nascimento inválida: " + pessoaDTO.getDataDeNascimento());
+            throw new IllegalArgumentException("Data de nascimento inválida: " + pessoaDTO.dataDeNascimento());
         }
 
         try {
-            pessoa.setSexo(converterSexo(pessoaDTO.getSexo()));
+            pessoa.setSexo(converterSexo(pessoaDTO.sexo()));
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Sexo inválido: " + pessoaDTO.getSexo());
+            throw new IllegalArgumentException("Sexo inválido: " + pessoaDTO.sexo());
         }
 
         return pessoa;
@@ -59,7 +59,10 @@ public class PessoaService {
         }
     }
 
-    public void atualizarPessoa(Pessoa pessoa) { pessoaRepository.save(pessoa); }
+    public void atualizarPessoa(PessoaDTO pessoaDTO) {
+        Pessoa pessoaAtualizada = converterDTOparaEntidade(pessoaDTO);
+        pessoaRepository.save(pessoaAtualizada);
+    }
     private LocalDate converterData(String data) {
         DateTimeFormatter[] formatters = {
                 DateTimeFormatter.ofPattern("dd/MM/yyyy"),

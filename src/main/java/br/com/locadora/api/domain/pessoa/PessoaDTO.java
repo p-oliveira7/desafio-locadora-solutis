@@ -1,30 +1,16 @@
 package br.com.locadora.api.domain.pessoa;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDate;
-
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class PessoaDTO {
+public record PessoaDTO (
     @NotBlank
-    private String nome;
-
+    String nome,
     @NotBlank
-    private String dataDeNascimento;
-
+    String dataDeNascimento,
     @NotBlank
-    private String cpf;
-
+    String cpf,
     @NotBlank
-    private String sexo;
-
-    private String matricula;
-    private String numeroCNH;
+    String sexo,
+    String matricula,
+    String numeroCNH
+) {
 }

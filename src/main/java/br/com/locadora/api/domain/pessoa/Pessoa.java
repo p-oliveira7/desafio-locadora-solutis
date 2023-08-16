@@ -22,4 +22,11 @@ public class Pessoa {
     private String cpf;
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
+
+    public Pessoa(Long id, String nome, String cpf, Sexo genero) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.sexo = genero;
+    }
 }
