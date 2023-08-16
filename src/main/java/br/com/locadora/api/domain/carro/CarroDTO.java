@@ -10,26 +10,23 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class CarroDTO {
+
+public record CarroDTO(
     @NotNull
-    private Long id;
+    Long id,
     @NotNull
-    private String placa;
+    String placa,
     @NotNull
-    private String chassi;
+    String chassi,
     @NotNull
-    private String cor;
+    String cor,
     @NotNull
-    private BigDecimal valorDiaria;
+ BigDecimal valorDiaria,
     @NotNull
-    private String categoria;
-    private String acessorio;
+    Categoria categoria,
+    String acessorio,
     @NotNull
-    private String descricao;
+    String descricao,
     @NotNull
-    private String nome;
+    String nome){
 }
