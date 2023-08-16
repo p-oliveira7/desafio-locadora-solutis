@@ -1,13 +1,14 @@
 package br.com.locadora.api.services;
 
-import br.com.locadora.api.domain.pessoa.Funcionario;
-import br.com.locadora.api.domain.pessoa.Motorista;
-import br.com.locadora.api.domain.pessoa.Pessoa;
-import br.com.locadora.api.domain.pessoa.PessoaDTO;
+import br.com.locadora.api.domain.pessoa.*;
 import br.com.locadora.api.repositories.PessoaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -18,19 +19,35 @@ public class PessoaService {
 
     public List<Pessoa> findAll() { return pessoaRepository.findAll(); }
     public void cadastrarPessoa(PessoaDTO pessoaDTO) {
-        // fazer conversão da String dataDeNascimento
         Pessoa pessoa = converterDTOparaEntidade(pessoaDTO);
         pessoaRepository.save(pessoa); // Persiste a entidade no banco de dados
     }
 
     private Pessoa converterDTOparaEntidade(PessoaDTO pessoaDTO) {
-        if (pessoaDTO.getMatricula() != null && pessoaDTO.getNumeroCNH() != null) {
-            return new Funcionario();
-        } else if (pessoaDTO.getNumeroCNH() != null) {
-            return new Motorista();
+        Pessoa pessoa;
+
+        if (pessoaDTO.matricula() != null) {
+            pessoa = new Funcionario();
+        } else if (pessoaDTO.numeroCNH() != null) {
+            pessoa = new Motorista();
         } else {
-            return new Pessoa();
+            pessoa = new Pessoa();
         }
+
+        try {
+            LocalDate dataDeNascimento = converterData(pessoaDTO.dataDeNascimento());
+            pessoa.setDataDeNascimento(dataDeNascimento);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Data de nascimento inválida: " + pessoaDTO.dataDeNascimento());
+        }
+
+        try {
+            pessoa.setSexo(converterSexo(pessoaDTO.sexo()));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Sexo inválido: " + pessoaDTO.sexo());
+        }
+
+        return pessoa;
     }
 
     public void deletarPessoa(Long id) {
@@ -38,8 +55,46 @@ public class PessoaService {
         if (pessoa != null) {
             pessoaRepository.delete(pessoa);
         } else {
-            throw new RuntimeException("Pessoa não encontrada!");
+            throw new EntityNotFoundException("Pessoa não encontrada!");
         }
     }
-    public void atualizarPessoa(Pessoa pessoa) { pessoaRepository.save(pessoa); }
+
+    public void atualizarPessoa(PessoaDTO pessoaDTO) {
+        Pessoa pessoaAtualizada = converterDTOparaEntidade(pessoaDTO);
+        pessoaRepository.save(pessoaAtualizada);
+    }
+    private LocalDate converterData(String data) {
+        DateTimeFormatter[] formatters = {
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                DateTimeFormatter.ofPattern("dd.MM.yyyy"),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+                DateTimeFormatter.ofPattern("ddMMyyyy"),
+                DateTimeFormatter.ofPattern("dd/MM/yy"),
+                DateTimeFormatter.ofPattern("dd.MM.yy"),
+                DateTimeFormatter.ofPattern("dd-MM-yy"),
+                DateTimeFormatter.ofPattern("ddMMyy")
+        };
+
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                return LocalDate.parse(data, formatter);
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+
+        throw new IllegalArgumentException("Formato de data inválido: " + data);
+    }
+
+    private Sexo converterSexo(String sexoString) {
+        String sexoUpperCase = sexoString.toUpperCase();
+
+        if (sexoUpperCase.equals("M") || sexoUpperCase.equals("MASCULINO")) {
+            return Sexo.MASCULINO;
+        } else if (sexoUpperCase.equals("F") || sexoUpperCase.equals("FEMININO")) {
+            return Sexo.FEMININO;
+        } else {
+            throw new IllegalArgumentException("Sexo inválido: " + sexoString);
+        }
+    }
+
 }
