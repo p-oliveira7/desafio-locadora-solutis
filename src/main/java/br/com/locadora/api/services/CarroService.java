@@ -9,9 +9,10 @@ import br.com.locadora.api.domain.pessoa.PessoaDTO;
 import br.com.locadora.api.repositories.CarroRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class CarroService {
 
     @Autowired
