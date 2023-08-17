@@ -1,11 +1,7 @@
 package br.com.locadora.api.services;
 
-import br.com.locadora.api.domain.carro.Carro;
-import br.com.locadora.api.domain.carro.CarroDTO;
-import br.com.locadora.api.domain.pessoa.Funcionario;
-import br.com.locadora.api.domain.pessoa.Motorista;
+import br.com.locadora.api.domain.carro.*;
 import br.com.locadora.api.domain.pessoa.Pessoa;
-import br.com.locadora.api.domain.pessoa.PessoaDTO;
 import br.com.locadora.api.repositories.CarroRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +15,7 @@ public class CarroService {
     private CarroRepository carroRepository;
 
     public List<Carro> findAll() {
+
         return carroRepository.findAll();
     }
 
@@ -29,7 +26,7 @@ public class CarroService {
 
     public void cadastrarCarro(CarroDTO carroDTO) {
         Carro carro = converterDTOparaEntidade(carroDTO);
-        carroRepository.save(carro); // Persiste a entidade no banco de dados
+        carroRepository.save(carro);
     }
 
     public void deletarCarro(Long id) {
@@ -40,4 +37,36 @@ public class CarroService {
             throw new EntityNotFoundException("Carro não encontrado!");
         }
     }
-}
+
+    public List<Carro> listarCarrosPorCategoria(Categoria categoria){
+        List<Carro> carros = carroRepository.findAll();
+
+        carros.removeIf(carro -> !carro.getCategoria().equals(categoria));
+        return carros;
+    }
+
+
+    public List<Carro> listarCarrosPorModelo(ModeloCarro descricao){
+        List<Carro> carros = carroRepository.findAll();
+
+        carros.removeIf(carro -> !carro.getDescricao().equals(descricao));
+        return carros;
+    }
+
+
+  public List<Carro> listarCarrosPorAcessorios(Acessorio acessorio){
+        List<Carro> carros = carroRepository.findAll();
+
+        carros.removeIf(carro -> !carro.getAcessorio().equals(acessorio));
+        return carros;
+        }
+
+
+    public List<Carro> listarCarrosPorFabricante(Fabricante nome){
+        List<Carro> carros = carroRepository.findAll();
+
+        carros.removeIf(carro -> !carro.getNome().equals(nome));
+        return carros;
+    }
+
+    }

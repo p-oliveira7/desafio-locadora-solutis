@@ -14,9 +14,10 @@ import lombok.Setter;
 @Entity
 public class Acessorio extends Carro{
     @Column(name = "acessorio")
-    private String descricao;
+    private String acessorio;
 
-    public void descricao(String descricao){
-        this.descricao = descricao;
+    public void acessorio(String acessorio){
+        this.acessorio = acessorio;
     }
+
 }

@@ -24,9 +24,10 @@ public record CarroDTO(
  BigDecimal valorDiaria,
     @NotNull
     Categoria categoria,
-    String acessorio,
+
+    Acessorio acessorio,
     @NotNull
-    String descricao,
+    ModeloCarro descricao,
     @NotNull
-    String nome){
+    Fabricante nome){
 }

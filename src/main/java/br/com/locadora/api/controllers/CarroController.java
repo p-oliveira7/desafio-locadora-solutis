@@ -1,11 +1,13 @@
 package br.com.locadora.api.controllers;
-import br.com.locadora.api.domain.carro.CarroDTO;
+import br.com.locadora.api.domain.carro.*;
 import br.com.locadora.api.exceptions.ResponseMessage;
 import br.com.locadora.api.services.CarroService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/locadora/")
@@ -18,6 +20,27 @@ public class CarroController {
         var carros = carroService.findAll();
         return ResponseEntity.ok(carros);
     }
+
+    @GetMapping("/carros/categoria/{categoria}")
+    public List<Carro> listarCarrosPorCategoria(@PathVariable Categoria categoria){
+        return carroService.listarCarrosPorCategoria(categoria);
+    }
+
+    @GetMapping("/carros/fabricante/{nome}")
+    public List<Carro> listarCarrosPorFabricante(@PathVariable Fabricante nome){
+        return carroService.listarCarrosPorFabricante(nome);
+    }
+
+    @GetMapping("/carros/acessorios/{acessorio}")
+    public List<Carro> listarCarrosPorAcessorios(@PathVariable Acessorio acessorio){
+        return carroService.listarCarrosPorAcessorios(acessorio);
+    }
+
+    @GetMapping("/carros/modelo/{descricao}")
+    public List<Carro> listarCarrosPorModelo(@PathVariable ModeloCarro descricao){
+        return carroService.listarCarrosPorModelo(descricao);
+    }
+
 
     @PostMapping("/carros")
     public ResponseEntity<Object> cadastrarCarro(@RequestBody @Valid CarroDTO carroDTO) {
