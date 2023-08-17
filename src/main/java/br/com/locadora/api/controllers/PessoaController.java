@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/locadora/")
 public class PessoaController {
@@ -15,10 +17,9 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @GetMapping("/pessoas")
-    public ResponseEntity<Object> findAll() {
-        // TODO: usar a mesma lógica de que deve enviar a pessoaDTO
-        var pessoas = pessoaService.findAll();
-        return ResponseEntity.ok(pessoas);
+    public ResponseEntity<List<PessoaDTO>> findAll() {
+        List<PessoaDTO> pessoasDTO = pessoaService.findAll();
+        return ResponseEntity.ok(pessoasDTO);
     }
 
     @PostMapping("/pessoas")
@@ -27,9 +28,9 @@ public class PessoaController {
         return ResponseEntity.ok(new ResponseMessage("Cadastro feito com sucesso."));
     }
 
-    @PutMapping("/pessoas")
-    public ResponseEntity<Object> atualizarPessoa(@RequestBody PessoaDTO pessoaAtualizada) {
-        pessoaService.atualizarPessoa(pessoaAtualizada);
+    @PutMapping("/pessoas/{cpf}")
+    public ResponseEntity<Object> atualizarPessoa(@PathVariable String cpf, @RequestBody @Valid PessoaDTO pessoaAtualizada) {
+        pessoaService.atualizarPessoa(cpf, pessoaAtualizada);
         return ResponseEntity.ok(new ResponseMessage("Cadastro atualizado com sucesso."));
     }
 

@@ -5,8 +5,8 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Table
-@Entity
+@Table(name = "pessoas")
+@Entity(name = "pessoa")
 @EqualsAndHashCode
 @Getter
 @Setter

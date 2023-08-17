@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
 
-@Entity
+@Entity(name = "funcionario")
 @Getter
 @Setter
 @AllArgsConstructor
