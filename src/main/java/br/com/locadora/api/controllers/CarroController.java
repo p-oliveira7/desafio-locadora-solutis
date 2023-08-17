@@ -26,18 +26,18 @@ public class CarroController {
         return carroService.listarCarrosPorCategoria(categoria);
     }
 
-    @GetMapping("/carros/fabricante/{nome}")
-    public List<Carro> listarCarrosPorFabricante(@PathVariable Fabricante nome){
+   @GetMapping("/carros/fabricante/{nome}")
+    public List<Carro> listarCarrosPorFabricante(@PathVariable String nome){
         return carroService.listarCarrosPorFabricante(nome);
     }
 
     @GetMapping("/carros/acessorios/{acessorio}")
-    public List<Carro> listarCarrosPorAcessorios(@PathVariable Acessorio acessorio){
+    public List<Carro> listarCarrosPorAcessorios(@PathVariable String acessorio){
         return carroService.listarCarrosPorAcessorios(acessorio);
     }
 
     @GetMapping("/carros/modelo/{descricao}")
-    public List<Carro> listarCarrosPorModelo(@PathVariable ModeloCarro descricao){
+    public List<Carro> listarCarrosPorModelo(@PathVariable String descricao){
         return carroService.listarCarrosPorModelo(descricao);
     }
 

@@ -7,17 +7,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
+@NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Acessorio extends Carro{
+
     @Column(name = "acessorio")
     private String acessorio;
 
-    public void acessorio(String acessorio){
-        this.acessorio = acessorio;
+    @Override
+    public String getAcessorio() {
+        return super.getAcessorio();
+    }
     }
 
-}
+
+

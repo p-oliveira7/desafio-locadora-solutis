@@ -1,7 +1,6 @@
 package br.com.locadora.api.services;
 
 import br.com.locadora.api.domain.carro.*;
-import br.com.locadora.api.domain.pessoa.Pessoa;
 import br.com.locadora.api.repositories.CarroRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class CarroService {
     }
 
 
-    public List<Carro> listarCarrosPorModelo(ModeloCarro descricao){
+    public List<Carro> listarCarrosPorModelo(String descricao){
         List<Carro> carros = carroRepository.findAll();
 
         carros.removeIf(carro -> !carro.getDescricao().equals(descricao));
@@ -54,7 +53,7 @@ public class CarroService {
     }
 
 
-  public List<Carro> listarCarrosPorAcessorios(Acessorio acessorio){
+  public List<Carro> listarCarrosPorAcessorios(String acessorio){
         List<Carro> carros = carroRepository.findAll();
 
         carros.removeIf(carro -> !carro.getAcessorio().equals(acessorio));
@@ -62,7 +61,7 @@ public class CarroService {
         }
 
 
-    public List<Carro> listarCarrosPorFabricante(Fabricante nome){
+    public List<Carro> listarCarrosPorFabricante(String nome){
         List<Carro> carros = carroRepository.findAll();
 
         carros.removeIf(carro -> !carro.getNome().equals(nome));

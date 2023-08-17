@@ -1,5 +1,6 @@
 package br.com.locadora.api.domain.aluguel;
 
+import br.com.locadora.api.domain.carro.Carro;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +25,9 @@ public class Aluguel {
     private Date dataEntrega;
 
     private Date dataDevolucao;
-    // Falta o Carro
+
+    @OneToOne
+    private Carro carro;
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true) // Pode ser ou não bidirecional
     @JoinColumn(name = "apolice_id")
