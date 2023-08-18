@@ -3,6 +3,7 @@ package br.com.locadora.api.domain.aluguel;
 import br.com.locadora.api.domain.apolice.ApoliceSeguro;
 import br.com.locadora.api.domain.carro.Carro;
 import br.com.locadora.api.domain.pessoa.Pessoa;
+
 import jakarta.persistence.*;
 import lombok.*;
 

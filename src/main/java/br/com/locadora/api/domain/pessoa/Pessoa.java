@@ -1,18 +1,16 @@
 package br.com.locadora.api.domain.pessoa;
-
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 
-@Table
 @Entity
-@EqualsAndHashCode
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING,
+        name = "tipo")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Pessoa {
+public abstract class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +21,4 @@ public class Pessoa {
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
-    public Pessoa(Long id, String nome, String cpf, Sexo genero) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.sexo = genero;
-    }
 }

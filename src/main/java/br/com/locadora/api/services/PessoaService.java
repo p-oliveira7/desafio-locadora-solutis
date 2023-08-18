@@ -1,15 +1,17 @@
 package br.com.locadora.api.services;
 
 import br.com.locadora.api.domain.pessoa.*;
+import br.com.locadora.api.mappers.PessoaMapper;
 import br.com.locadora.api.repositories.PessoaRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PessoaService {
@@ -17,84 +19,64 @@ public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    public List<Pessoa> findAll() { return pessoaRepository.findAll(); }
-    public void cadastrarPessoa(PessoaDTO pessoaDTO) {
-        Pessoa pessoa = converterDTOparaEntidade(pessoaDTO);
-        pessoaRepository.save(pessoa); // Persiste a entidade no banco de dados
+    @Transactional(readOnly = true)
+    public List<PessoaDTO> findAll() {
+        List<Pessoa> pessoas = pessoaRepository.findAll();
+        return pessoas.stream()
+                .map(PessoaMapper.INSTANCE::pessoaToPessoaDTO)
+                .collect(Collectors.toList());
     }
 
-    private Pessoa converterDTOparaEntidade(PessoaDTO pessoaDTO) {
-        Pessoa pessoa;
+    @Transactional
+    public void cadastrarPessoa(@NotNull @Valid PessoaDTO pessoaDTO) {
+        Pessoa pessoa = pessoaDTO.converterDTOparaEntidade();
 
-        if (pessoaDTO.matricula() != null) {
-            pessoa = new Funcionario();
-        } else if (pessoaDTO.numeroCNH() != null) {
-            pessoa = new Motorista();
-        } else {
-            pessoa = new Pessoa();
-        }
-
-        try {
-            LocalDate dataDeNascimento = converterData(pessoaDTO.dataDeNascimento());
-            pessoa.setDataDeNascimento(dataDeNascimento);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Data de nascimento inválida: " + pessoaDTO.dataDeNascimento());
-        }
-
-        try {
-            pessoa.setSexo(converterSexo(pessoaDTO.sexo()));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Sexo inválido: " + pessoaDTO.sexo());
-        }
-
-        return pessoa;
-    }
-
-    public void deletarPessoa(Long id) {
-        Pessoa pessoa = pessoaRepository.findById(id).orElse(null);
         if (pessoa != null) {
-            pessoaRepository.delete(pessoa);
+            pessoaRepository.save(pessoa); // Persiste a entidade no banco de dados
         } else {
-            throw new EntityNotFoundException("Pessoa não encontrada!");
+            throw new IllegalArgumentException("A conversão do DTO para entidade Pessoa falhou.");
         }
     }
 
-    public void atualizarPessoa(PessoaDTO pessoaDTO) {
-        Pessoa pessoaAtualizada = converterDTOparaEntidade(pessoaDTO);
-        pessoaRepository.save(pessoaAtualizada);
-    }
-    private LocalDate converterData(String data) {
-        DateTimeFormatter[] formatters = {
-                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-                DateTimeFormatter.ofPattern("dd.MM.yyyy"),
-                DateTimeFormatter.ofPattern("dd-MM-yyyy"),
-                DateTimeFormatter.ofPattern("ddMMyyyy"),
-                DateTimeFormatter.ofPattern("dd/MM/yy"),
-                DateTimeFormatter.ofPattern("dd.MM.yy"),
-                DateTimeFormatter.ofPattern("dd-MM-yy"),
-                DateTimeFormatter.ofPattern("ddMMyy")
-        };
+    @Transactional
+    public void deletarPessoa(String cpf) {
+        Optional<Funcionario> funcionario = pessoaRepository.findFuncionarioByCpf(cpf);
+        if (funcionario.isPresent()) {
+            pessoaRepository.delete(funcionario.get());
+            return;
+        }
 
-        for (DateTimeFormatter formatter : formatters) {
-            try {
-                return LocalDate.parse(data, formatter);
-            } catch (DateTimeParseException ignored) {
+        Optional<Motorista> motorista = pessoaRepository.findMotoristaByCpf(cpf);
+        if (motorista.isPresent()) {
+            pessoaRepository.delete(motorista.get());
+            return;
+        }
+
+        throw new EntityNotFoundException("Pessoa não encontrada!");
+    }
+
+    @Transactional
+    public void atualizarPessoa(String cpf, PessoaDTO pessoaDTO) {
+        Optional<Funcionario> funcionarioExistente = pessoaRepository.findFuncionarioByCpf(cpf);
+        if (funcionarioExistente.isPresent()) {
+            Pessoa pessoaAtualizada = pessoaDTO.converterDTOparaEntidade();
+            if (pessoaAtualizada instanceof Funcionario funcionarioAtualizado) {
+                funcionarioAtualizado.setId(funcionarioExistente.get().getId()); // Mantém o ID do funcionário existente
+                pessoaRepository.save(funcionarioAtualizado);
+                return;
             }
         }
 
-        throw new IllegalArgumentException("Formato de data inválido: " + data);
-    }
-
-    private Sexo converterSexo(String sexoString) {
-        String sexoUpperCase = sexoString.toUpperCase();
-
-        if (sexoUpperCase.equals("M") || sexoUpperCase.equals("MASCULINO")) {
-            return Sexo.MASCULINO;
-        } else if (sexoUpperCase.equals("F") || sexoUpperCase.equals("FEMININO")) {
-            return Sexo.FEMININO;
-        } else {
-            throw new IllegalArgumentException("Sexo inválido: " + sexoString);
+        Optional<Motorista> motoristaExistente = pessoaRepository.findMotoristaByCpf(cpf);
+        if (motoristaExistente.isPresent()) {
+            Pessoa pessoaAtualizada = pessoaDTO.converterDTOparaEntidade();
+            if (pessoaAtualizada instanceof Motorista motoristaAtualizado) {
+                motoristaAtualizado.setId(motoristaExistente.get().getId()); // Mantém o ID do motorista existente
+                pessoaRepository.save(motoristaAtualizado);
+                return;
+            }
         }
-    }
 
+        throw new EntityNotFoundException("Pessoa não encontrada com o CPF: " + cpf);
+    }
 }
