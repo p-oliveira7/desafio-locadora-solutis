@@ -1,10 +1,12 @@
 package br.com.locadora.api.domain.aluguel;
 
+import br.com.locadora.api.domain.apolice.ApoliceSeguro;
 import br.com.locadora.api.domain.carro.Carro;
+import br.com.locadora.api.domain.pessoa.Pessoa;
+
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -20,24 +22,33 @@ public class Aluguel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private String temporaryId;
+
     private Calendar dataPedido;
 
     private Date dataEntrega;
 
     private Date dataDevolucao;
 
-    @OneToOne
-    private Carro carro;
-
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true) // Pode ser ou não bidirecional
-    @JoinColumn(name = "apolice_id")
+    @Embedded
     private ApoliceSeguro apoliceSeguro;
 
-    public Aluguel(Calendar dataPedido, Date dataEntrega, Date dataDevolucao, BigDecimal valorFranquia,
-                   Boolean protecaoTerceiro, Boolean protecaoCausaNatural, Boolean protecaoRoubo) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "carro_id")
+    private Carro carro;
 
-        this.dataPedido = dataPedido;
-        this.dataEntrega = dataEntrega;
-        this.dataDevolucao = dataDevolucao;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pessoa_id") // Chave estrangeira para a tabela de Pessoas
+    private Pessoa pessoa;
+
+
+    public Aluguel(AluguelApoliceRequestDTO dados, Carro carro) {
+        this.dataPedido = dados.dataPedido();
+        this.dataEntrega = dados.dataEntrega();
+        this.dataDevolucao = dados.dataDevolucao();
+        this.apoliceSeguro = new ApoliceSeguro(dados.apolice());
+        this.carro = carro;
     }
+
 }

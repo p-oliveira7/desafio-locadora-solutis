@@ -1,19 +1,11 @@
 package br.com.locadora.api.domain.carro;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
 
 public record CarroDTO(
-    @NotNull
-    Long id,
     @NotNull
     String placa,
     @NotNull

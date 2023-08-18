@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "carro")
 @Table(name="carros")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Carro {
