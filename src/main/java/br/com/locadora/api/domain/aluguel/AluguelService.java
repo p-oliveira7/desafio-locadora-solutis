@@ -113,9 +113,11 @@ public class AluguelService {
         return alugueis.isEmpty();
     }
 
-    public void finalizarCompra() {
-        List<Aluguel> alugueisNoCarrinho = carrinhoAlugueis.getAlugueis();
+    public void finalizarCompra(HttpSession session) {
 
+        CarrinhoAlugueis carrinho = (CarrinhoAlugueis) session.getAttribute("carrinho");
+        List<Aluguel> alugueisNoCarrinho = carrinho.getAlugueis();
+        // Nota: Ainda falta validar se o usuario é o mesmo autenticado, se a pessoa é motorista e adicionar os valores totais na listagem do carrinho e na persistencia
         for (Aluguel aluguel : alugueisNoCarrinho) {
             if (verificaDisponibilidade(aluguel.getCarro().getId(), aluguel.getDataEntrega(), aluguel.getDataDevolucao())) {
                 aluguelRepository.save(aluguel);

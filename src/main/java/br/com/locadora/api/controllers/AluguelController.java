@@ -53,8 +53,8 @@ public class AluguelController {
 
     @PostMapping("/finalizar-compra")
     @Transactional
-    public ResponseEntity finalizarCompra() {
-        aluguelService.finalizarCompra();
+    public ResponseEntity finalizarCompra(HttpSession session) {
+        aluguelService.finalizarCompra(session);
         return ResponseEntity.ok("Compra finalizada com sucesso.");
     }
     @PostMapping("/modificar-aluguel")
