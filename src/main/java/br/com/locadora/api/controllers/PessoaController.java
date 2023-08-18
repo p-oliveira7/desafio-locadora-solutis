@@ -34,9 +34,9 @@ public class PessoaController {
         return ResponseEntity.ok(new ResponseMessage("Cadastro atualizado com sucesso."));
     }
 
-    @DeleteMapping("/pessoas/{id}")
-    public ResponseEntity<Object> deletarPessoa(@PathVariable @Valid Long id) {
-        pessoaService.deletarPessoa(id);
+    @DeleteMapping("/pessoas/{cpf}")
+    public ResponseEntity<Object> deletarPessoa(@PathVariable @Valid String cpf) {
+        pessoaService.deletarPessoa(cpf);
         return ResponseEntity.ok(new ResponseMessage("Pessoa deletada com sucesso."));
     }
 }

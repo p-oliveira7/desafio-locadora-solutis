@@ -1,37 +1,48 @@
 package br.com.locadora.api.domain.pessoa;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 public record PessoaDTO (
     @NotBlank
+    @NotNull
     String nome,
     @NotBlank
     String dataDeNascimento,
     @NotBlank
-    @Pattern.List({
-            @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato ###.###.###-##"),
-            @Pattern(regexp = "\\d{11}", message = "O CPF deve conter apenas números")
-    })
+    @Pattern(regexp = "^([0-9]{3}\\.?){3}-?[0-9]{2}$", message = "O CPF deve estar no formato ###.###.###-## ou sem ponto e hífen")
     String cpf,
     @NotBlank
     String sexo,
+    @Pattern(regexp = "\\d{6}", message = "A matrícula deve conter exatamente 6 dígitos")
     String matricula,
+    @Pattern(regexp = "\\d{11}", message = "O número da CNH deve conter exatamente 11 dígitos")
     String numeroCNH
 ) {
     public Pessoa converterDTOparaEntidade() {
-        Pessoa pessoa;
+        Pessoa pessoa = null;
 
-        if (this.matricula != null) {
-            pessoa = new Funcionario();
-        } else if (this.numeroCNH != null) {
-            pessoa = new Motorista();
-        } else {
-            pessoa = new Pessoa();
+        try {
+            if (this.matricula != null) {
+                pessoa = new Funcionario();
+                ((Funcionario) pessoa).setMatricula(this.matricula);
+            } else if (this.numeroCNH != null) {
+                pessoa = new Motorista();
+                ((Motorista) pessoa).setNumeroCNH(this.numeroCNH);
+            }
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException("A pessoa não é do tipo Funcionário nem Motorista.", e);
+        }
+
+        if (pessoa == null) {
+            return null; // Retorna nulo se a pessoa não é do tipo Funcionário nem Motorista
         }
 
         try {
@@ -47,29 +58,25 @@ public record PessoaDTO (
             throw new IllegalArgumentException("Sexo inválido: " + this.sexo);
         }
 
+        pessoa.setNome(this.nome);
+        pessoa.setCpf(this.cpf);
+
         return pessoa;
     }
     private LocalDate converterData(String data) {
-        DateTimeFormatter[] formatters = {
-                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-                DateTimeFormatter.ofPattern("dd.MM.yyyy"),
-                DateTimeFormatter.ofPattern("dd-MM-yyyy"),
-                DateTimeFormatter.ofPattern("ddMMyyyy"),
-                DateTimeFormatter.ofPattern("dd/MM/yy"),
-                DateTimeFormatter.ofPattern("dd.MM.yy"),
-                DateTimeFormatter.ofPattern("dd-MM-yy"),
-                DateTimeFormatter.ofPattern("ddMMyy")
-        };
+        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendOptional(DateTimeFormatter.ofPattern("d/M/yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                .toFormatter(new Locale("pt", "BR"));
 
-        for (DateTimeFormatter formatter : formatters) {
-            try {
-                return LocalDate.parse(data, formatter);
-            } catch (DateTimeParseException ignored) {
-            }
+        try {
+            return LocalDate.parse(data, dateFormatter);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Formato de data inválido: " + data);
         }
-
-        throw new IllegalArgumentException("Formato de data inválido: " + data);
     }
+
 
     private Sexo converterSexo() {
         String sexoUpperCase = this.sexo.toUpperCase();
