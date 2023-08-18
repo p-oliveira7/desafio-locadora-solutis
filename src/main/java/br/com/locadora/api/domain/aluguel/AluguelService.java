@@ -3,6 +3,7 @@ package br.com.locadora.api.domain.aluguel;
 import br.com.locadora.api.domain.apolice.ApoliceSeguro;
 import br.com.locadora.api.domain.carro.Carro;
 import br.com.locadora.api.domain.usuario.Usuario;
+import br.com.locadora.api.mappers.AluguelMapper;
 import br.com.locadora.api.repositories.AluguelRepository;
 import br.com.locadora.api.repositories.CarroRepository;
 import jakarta.servlet.http.HttpSession;
@@ -10,10 +11,8 @@ import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AluguelService {
@@ -22,14 +21,12 @@ public class AluguelService {
     @Autowired
     private AluguelRepository aluguelRepository;
     @Autowired
-    private CarrinhoAlugueis carrinhoAlugueis;
-    @Autowired
-    private HttpSession httpSession;
+    private AluguelMapper aluguelMapper;
 
     public ListarCarrinhoDTO adicionarAluguelAoCarrinho(AluguelApoliceRequestDTO dto, Usuario user, HttpSession session) {
         Carro carro = carroRepository.findCarroById(dto.idCarro());
-
         CarrinhoAlugueis carrinho = (CarrinhoAlugueis) session.getAttribute("carrinho");
+
         if (carrinho == null) {
             carrinho = new CarrinhoAlugueis(user);
             session.setAttribute("carrinho", carrinho);
@@ -46,65 +43,54 @@ public class AluguelService {
         novoAluguel.setTemporaryId(temporaryId);
         carrinho.adicionarAluguel(novoAluguel);
 
-        // Certifique-se de retornar o ID do aluguel
-        return new ListarCarrinhoDTO(novoAluguel.getTemporaryId(), carro.getPlaca(), dto.dataPedido(), dto.dataEntrega(), dto.dataDevolucao(),
-                dto.apolice().valorFranquia(), dto.apolice().protecaoTerceiro(), dto.apolice().protecaoCausaNatural(), dto.apolice().protecaoRoubo());
+        // Certifique-se de retornar o ID temporario do aluguel
+        return aluguelMapper.toListarCarrinhoDTO(novoAluguel);
     }
-    public ListarCarrinhoDTO modificarAluguelNoCarrinho(String temporaryId, AluguelApoliceRequestDTO novoDto) {
-        CarrinhoAlugueis carrinho = (CarrinhoAlugueis) httpSession.getAttribute("carrinho");
+    public List<ListarCarrinhoDTO> getAlugueisDoUsuario(HttpSession session) {
 
-        Aluguel aluguel = carrinho.getAlugueis().stream()
-                .filter(a -> a.getTemporaryId().equals(temporaryId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Aluguel não encontrado no carrinho"));
+        CarrinhoAlugueis carrinho = (CarrinhoAlugueis) session.getAttribute("carrinho");
+
+        List<Aluguel> alugueisDoUsuario = carrinho.getAlugueis();
+
+        return alugueisDoUsuario.stream()
+                .map(aluguelMapper::toListarCarrinhoDTO)
+                .collect(Collectors.toList());
+    }
+    public ListarCarrinhoDTO modificarAluguelNoCarrinho(String temporaryId, AluguelApoliceRequestDTO novoDto, HttpSession session) {
+        CarrinhoAlugueis carrinho = (CarrinhoAlugueis) session.getAttribute("carrinho");
+
+        Aluguel aluguel = findAluguelByTemporaryId(temporaryId, carrinho);
 
         aluguel.setDataEntrega(novoDto.dataEntrega());
         aluguel.setDataDevolucao(novoDto.dataDevolucao());
         aluguel.setApoliceSeguro(new ApoliceSeguro(novoDto.apolice()));
 
-        return new ListarCarrinhoDTO(aluguel.getTemporaryId(),aluguel.getCarro().getPlaca(), aluguel.getDataPedido(),
-                aluguel.getDataEntrega(), aluguel.getDataDevolucao(), aluguel.getApoliceSeguro().getValorFranquia(),
-                aluguel.getApoliceSeguro().getProtecaoTerceiro(), aluguel.getApoliceSeguro().getProtecaoCausaNatural(),
-                aluguel.getApoliceSeguro().getProtecaoRoubo());
+        return aluguelMapper.toListarCarrinhoDTO(aluguel);
     }
-    public List<ListarCarrinhoDTO> getAlugueisDoUsuario(HttpSession session) {
-
+    public void removerAluguel(String temporaryId, HttpSession session) {
         CarrinhoAlugueis carrinho = (CarrinhoAlugueis) session.getAttribute("carrinho");
-        if (carrinho == null) {
-            return new ArrayList<>();
-        }
 
-        List<Aluguel> alugueisDoUsuario = carrinho.getAlugueis();
+        Aluguel aluguel = findAluguelByTemporaryId(temporaryId, carrinho);
 
-        List<ListarCarrinhoDTO> alugueisResponse = new ArrayList<>();
-        for (Aluguel aluguel : alugueisDoUsuario) {
-            alugueisResponse.add(new ListarCarrinhoDTO(aluguel.getTemporaryId(), aluguel.getCarro().getPlaca(), aluguel.getDataPedido(), aluguel.getDataEntrega(),
-                    aluguel.getDataDevolucao(), aluguel.getApoliceSeguro().getValorFranquia(), aluguel.getApoliceSeguro().getProtecaoTerceiro(),
-                    aluguel.getApoliceSeguro().getProtecaoCausaNatural(), aluguel.getApoliceSeguro().getProtecaoRoubo()));
-        }
-
-        return alugueisResponse;
+        carrinho.removerAluguel(aluguel);
     }
+    public void finalizarCompra(HttpSession session) {
+        CarrinhoAlugueis carrinho = (CarrinhoAlugueis) session.getAttribute("carrinho");
+        List<Aluguel> alugueisNoCarrinho = carrinho.getAlugueis();
 
-    public AluguelResponseDTO alugar(AluguelApoliceRequestDTO dto) {
-        var idCarro = dto.idCarro();
-        var dataInicial = dto.dataEntrega();
-        var dataFinal = dto.dataDevolucao();
+        for (Aluguel aluguel : alugueisNoCarrinho) {
+            Long idCarro = aluguel.getCarro().getId();
+            Date dataInicial = aluguel.getDataEntrega();
+            Date dataFinal = aluguel.getDataDevolucao();
 
-        if (!verificaDisponibilidade(idCarro, dataInicial, dataFinal)) {
-            throw new RuntimeException("O carro não está disponível para aluguel entre as datas especificadas.");
+            if (!verificaDisponibilidade(idCarro, dataInicial, dataFinal)) {
+                throw new RuntimeException("O carro não está disponível para aluguel entre as datas especificadas.");
+            }
+
+            aluguelRepository.save(aluguel);
         }
-        Carro carro = carroRepository.findCarroById(dto.idCarro());
-        String placa = carro.getPlaca();
-
-        Aluguel aluguel = new Aluguel(dto, carro);
-
-        aluguelRepository.save(aluguel);
-
-        return new AluguelResponseDTO(placa, dto.dataPedido(), dto.dataEntrega(), dto.dataDevolucao(),
-                dto.apolice().valorFranquia(), dto.apolice().protecaoTerceiro(), dto.apolice().protecaoCausaNatural(), dto.apolice().protecaoRoubo());
     }
-
+    // Métodos utilitarios
     private Boolean verificaDisponibilidade(Long idCarro, Date dataInicial, Date dataFinal) {
         if (!carroRepository.existsById(idCarro)) {
             throw new ValidationException("Carro informado não existe");
@@ -112,28 +98,11 @@ public class AluguelService {
         List<Aluguel> alugueis = aluguelRepository.findAlugueisByCarroAndRentalPeriodOverlapping(idCarro, dataInicial, dataFinal);
         return alugueis.isEmpty();
     }
-
-    public void finalizarCompra(HttpSession session) {
-
-        CarrinhoAlugueis carrinho = (CarrinhoAlugueis) session.getAttribute("carrinho");
-        List<Aluguel> alugueisNoCarrinho = carrinho.getAlugueis();
-        // Nota: Ainda falta validar se o usuario é o mesmo autenticado, se a pessoa é motorista e adicionar os valores totais na listagem do carrinho e na persistencia
-        for (Aluguel aluguel : alugueisNoCarrinho) {
-            if (verificaDisponibilidade(aluguel.getCarro().getId(), aluguel.getDataEntrega(), aluguel.getDataDevolucao())) {
-                aluguelRepository.save(aluguel);
-            } else {
-                throw new RuntimeException("O carro não está disponível para aluguel entre as datas especificadas.");
-            }
-        }
-    }
-    public void removerAluguel(String temporaryId, HttpSession session) {
-        CarrinhoAlugueis carrinho = (CarrinhoAlugueis) session.getAttribute("carrinho");
-
-        Aluguel aluguel = carrinho.getAlugueis().stream()
+    private Aluguel findAluguelByTemporaryId(String temporaryId, CarrinhoAlugueis carrinho) {
+        // Nota: Código que busca o iten selecionado no carrinho.
+        return carrinho.getAlugueis().stream()
                 .filter(a -> a.getTemporaryId().equals(temporaryId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Aluguel não encontrado no carrinho"));
-
-        carrinho.removerAluguel(aluguel);
     }
 }
