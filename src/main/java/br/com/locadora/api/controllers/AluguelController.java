@@ -1,7 +1,8 @@
 package br.com.locadora.api.controllers;
 
 import br.com.locadora.api.domain.aluguel.AluguelApoliceRequestDTO;
-import br.com.locadora.api.domain.aluguel.AluguelService;
+import br.com.locadora.api.services.AluguelServiceInterface;
+import br.com.locadora.api.services.impl.AluguelService;
 import br.com.locadora.api.domain.aluguel.ListarCarrinhoDTO;
 import br.com.locadora.api.domain.usuario.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ import java.util.List;
 public class AluguelController {
 
     @Autowired
-    private AluguelService aluguelService;
+    private AluguelServiceInterface aluguelService;
 
     @Autowired
     private HttpServletRequest request;

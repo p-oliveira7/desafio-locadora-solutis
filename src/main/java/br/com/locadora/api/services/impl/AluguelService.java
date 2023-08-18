@@ -1,11 +1,16 @@
-package br.com.locadora.api.domain.aluguel;
+package br.com.locadora.api.services.impl;
 
+import br.com.locadora.api.domain.aluguel.Aluguel;
+import br.com.locadora.api.domain.aluguel.AluguelApoliceRequestDTO;
+import br.com.locadora.api.domain.aluguel.CarrinhoAlugueis;
+import br.com.locadora.api.domain.aluguel.ListarCarrinhoDTO;
 import br.com.locadora.api.domain.apolice.ApoliceSeguro;
 import br.com.locadora.api.domain.carro.Carro;
 import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.mappers.AluguelMapper;
 import br.com.locadora.api.repositories.AluguelRepository;
 import br.com.locadora.api.repositories.CarroRepository;
+import br.com.locadora.api.services.AluguelServiceInterface;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class AluguelService {
+public class AluguelService implements AluguelServiceInterface {
     @Autowired
     private CarroRepository carroRepository;
     @Autowired
