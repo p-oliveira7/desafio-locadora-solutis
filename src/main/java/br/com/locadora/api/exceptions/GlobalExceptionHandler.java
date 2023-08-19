@@ -1,7 +1,8 @@
 package br.com.locadora.api.exceptions;
 
+
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ConstraintViolationException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +12,7 @@ import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ResponseMessage> handleValidationException(ConstraintViolationException ex) {

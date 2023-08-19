@@ -26,24 +26,19 @@ public record PessoaDTO (
     @Pattern(regexp = "\\d{11}", message = "O número da CNH deve conter exatamente 11 dígitos")
     String numeroCNH
 ) {
-    public Pessoa converterDTOparaEntidade() {
+    public Pessoa dtoToEntity() {
         Pessoa pessoa = null;
 
-        try {
-            if (this.matricula != null) {
-                pessoa = new Funcionario();
-                ((Funcionario) pessoa).setMatricula(this.matricula);
-            } else if (this.numeroCNH != null) {
-                pessoa = new Motorista();
-                ((Motorista) pessoa).setNumeroCNH(this.numeroCNH);
-            }
-        } catch (ClassCastException e) {
-            throw new IllegalArgumentException("A pessoa não é do tipo Funcionário nem Motorista.", e);
+        if (this.matricula != null) {
+            pessoa = new Funcionario();
+            ((Funcionario) pessoa).setMatricula(this.matricula);
+        } else if (this.numeroCNH != null) {
+            pessoa = new Motorista();
+            ((Motorista) pessoa).setNumeroCNH(this.numeroCNH);
+        } else {
+            return null;
         }
 
-        if (pessoa == null) {
-            return null; // Retorna nulo se a pessoa não é do tipo Funcionário nem Motorista
-        }
 
         try {
             LocalDate dataDeNascimento = converterData(this.dataDeNascimento);

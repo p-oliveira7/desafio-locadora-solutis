@@ -18,15 +18,20 @@ public class PessoaController {
 
     @GetMapping("/pessoas")
     public ResponseEntity<List<PessoaDTO>> findAll() {
-        List<PessoaDTO> pessoasDTO = pessoaService.findAll();
+        List<PessoaDTO> pessoasDTO = pessoaService.listarPessoas();
         return ResponseEntity.ok(pessoasDTO);
     }
 
     @PostMapping("/pessoas")
     public ResponseEntity<Object> cadastrarPessoa(@RequestBody @Valid PessoaDTO pessoaDTO) {
-        pessoaService.cadastrarPessoa(pessoaDTO);
-        return ResponseEntity.ok(new ResponseMessage("Cadastro feito com sucesso."));
+        try {
+            pessoaService.cadastrarPessoa(pessoaDTO);
+            return ResponseEntity.ok(new ResponseMessage("Cadastro feito com sucesso."));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ResponseMessage(e.getMessage()));
+        }
     }
+
 
     @PutMapping("/pessoas/{cpf}")
     public ResponseEntity<Object> atualizarPessoa(@PathVariable String cpf, @RequestBody @Valid PessoaDTO pessoaAtualizada) {
