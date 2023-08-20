@@ -15,22 +15,31 @@ import br.com.locadora.api.exceptions.ResponseMessage;
 import br.com.locadora.api.services.AluguelService;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("locadora")
 public class AluguelController {
-
+    private static final Logger logger = LoggerFactory.getLogger(AluguelController.class);
     @Autowired
     private AluguelService aluguelService;
 
     @Operation(summary = "Adicionar um novo aluguel ao carrinho")
     @PostMapping("add")
-    public ListarCarrinhoDTO addAluguel(
+    public ResponseEntity<ListarCarrinhoDTO> addAluguel(
             @Parameter(description = "ID do carro a ser alugado", required = true)
             @RequestParam Long idCarro,
             @RequestBody @Valid AluguelApoliceRequestDTO dto,
             @AuthenticationPrincipal Usuario user) {
-        return aluguelService.addAluguel(idCarro, dto, user);
+        try {
+            logger.info("Adicionando aluguel ao carrinho para o usuário: " + user.getEmail());
+            ListarCarrinhoDTO carrinhoDTO = aluguelService.addAluguel(idCarro, dto, user);
+            return ResponseEntity.ok(carrinhoDTO);
+        } catch (Exception e) {
+            logger.error("Erro ao adicionar aluguel ao carrinho: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Listar aluguéis no carrinho")
@@ -46,8 +55,13 @@ public class AluguelController {
             @RequestParam Long id,
             @RequestBody AluguelApoliceRequestDTO aluguelAtualizacaoDTO,
             @AuthenticationPrincipal Usuario user) {
+        try{
         var aluguelAtualizado = aluguelService.atualizarCarrinho(user, id, aluguelAtualizacaoDTO);
         return ResponseEntity.ok(aluguelAtualizado);
+        } catch (Exception e) {
+            logger.error("Erro ao atualizar carrinho: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Apagar um aluguel do carrinho")
@@ -56,8 +70,13 @@ public class AluguelController {
             @Parameter(description = "ID do aluguel a ser removido", required = true)
             @RequestParam Long id,
             @AuthenticationPrincipal Usuario user) {
+        try{
         aluguelService.apagarItem(id, user);
         return ResponseEntity.ok(new ResponseMessage("Aluguel removido com sucesso!"));
+        } catch (Exception e) {
+            logger.error("Erro ao remover aluguel do carrinho: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Efetuar pagamento de um aluguel")
@@ -67,16 +86,25 @@ public class AluguelController {
             @RequestParam Long id,
             @AuthenticationPrincipal Usuario user,
             @RequestBody CartaoCreditoDTO cartaoCreditoDTO) {
-
+try{
         aluguelService.pagarAluguel(id, user, cartaoCreditoDTO);
         return ResponseEntity.ok("Pagamento efetuado com sucesso.");
+} catch (Exception e) {
+    logger.error("Erro ao efetuar pagamento do aluguel: " + e.getMessage());
+    return ResponseEntity.badRequest().build();
+}
     }
 
     @Operation(summary = "Listar aluguéis pagos")
     @GetMapping("/pagos")
     public ResponseEntity<List<ListarCarrinhoDTO>> listarAlugueisPagos(@AuthenticationPrincipal Usuario user) {
+        try{
         List<ListarCarrinhoDTO> alugueisPagos = aluguelService.listarAlugueisPagos(user);
         return ResponseEntity.ok(alugueisPagos);
+        } catch (Exception e) {
+            logger.error("Erro ao listar aluguéis pagos: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
 
