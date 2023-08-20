@@ -14,10 +14,13 @@ import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.domain.usuario.UsuarioRepository;
 import br.com.locadora.api.infra.security.TokenDTO;
 import br.com.locadora.api.infra.security.TokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("auth")
 public class AuthenticationController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
     @Autowired
     private AuthenticationManager manager;
     @Autowired
@@ -37,7 +40,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok(new TokenDTO(tokenJWT));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erro ao registrar novo usuário: " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -46,7 +49,9 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<Void> register(
             @RequestBody @Valid RegisterDTO data) {
+        try{
         if (usuarioRepository.findByEmail(data.email()) != null) {
+            logger.warn("Aviso: O email '" + data.email() + "' já está cadastrado");
             return ResponseEntity.badRequest().build();
         }
 
@@ -56,5 +61,9 @@ public class AuthenticationController {
         usuarioRepository.save(newUser);
 
         return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            logger.error("Erro ao registrar novo usuário: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
