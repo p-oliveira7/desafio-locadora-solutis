@@ -38,26 +38,6 @@ public class Carro {
     public Carro(String placa, String chassi, String cor, BigDecimal bigDecimal, Categoria categoria, Acessorio acessorio, ModeloCarro descricao, Fabricante nome) {
     }
 
-   /* public String getAcessorio() {
-        return acessorio;
-    }
-    public String getDescricao() {
-        return descricao;
-    }
-    public String getNome() {
-        return nome;
-    }
-
-
-public void Carro(String placa, String chassi, String cor, BigDecimal valorDiaria, Categoria categoria, String acessorio, String descricao, String nome) {
-        this.placa = placa;
-        this.chassi = chassi;
-        this.cor = cor;
-        this.valorDiaria = valorDiaria;
-        this.categoria = categoria;
-
-    }*/
-
 
 
 }
