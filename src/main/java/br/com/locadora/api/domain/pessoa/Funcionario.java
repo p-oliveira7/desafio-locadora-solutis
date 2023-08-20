@@ -14,4 +14,15 @@ import lombok.*;
 public class Funcionario extends Pessoa {
     @Column(name = "matricula")
     private String matricula;
+    @Override
+    public void atualizar(PessoaDTO pessoaAtualizada) {
+        if (pessoaAtualizada.matricula()!= null) {
+            this.setMatricula(pessoaAtualizada.matricula());
+        }
+    }
+    @Override
+    public PessoaDTO toDTO() {
+        String dataDeNascimentoFormatada = this.getDataDeNascimentoFormatada();
+        return new PessoaDTO(this.getNome(), dataDeNascimentoFormatada, this.getCpf(), this.getSexo().getDescricao(), this.getMatricula(), null);
+    }
 }

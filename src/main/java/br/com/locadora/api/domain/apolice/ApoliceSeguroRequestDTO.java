@@ -2,8 +2,8 @@ package br.com.locadora.api.domain.apolice;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.math.BigDecimal;
 
+import java.math.BigDecimal;
 public record ApoliceSeguroRequestDTO(
         @NotNull
         BigDecimal valorFranquia,
@@ -14,4 +14,23 @@ public record ApoliceSeguroRequestDTO(
         @NotNull
         Boolean protecaoRoubo
 ) {
+        @Override
+        public BigDecimal valorFranquia() {
+                return valorFranquia;
+        }
+
+        @Override
+        public Boolean protecaoTerceiro() {
+                return protecaoTerceiro;
+        }
+
+        @Override
+        public Boolean protecaoCausaNatural() {
+                return protecaoCausaNatural;
+        }
+
+        @Override
+        public Boolean protecaoRoubo() {
+                return protecaoRoubo;
+        }
 }

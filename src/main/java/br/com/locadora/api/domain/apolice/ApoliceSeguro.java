@@ -19,10 +19,25 @@ public class ApoliceSeguro {
 
     private Boolean protecaoRoubo;
 
-    public ApoliceSeguro(ApoliceSeguroRequestDTO dados){
+    public ApoliceSeguro(ApoliceSeguroRequestDTO dados) {
         this.valorFranquia = dados.valorFranquia();
         this.protecaoTerceiro = dados.protecaoTerceiro();
         this.protecaoCausaNatural = dados.protecaoCausaNatural();
         this.protecaoRoubo = dados.protecaoRoubo();
+    }
+
+    public void atualizarInformacoes(ApoliceSeguroRequestDTO dados) {
+        if (dados.valorFranquia() != null) {
+            this.valorFranquia = dados.valorFranquia();
+        }
+        if (dados.protecaoTerceiro() != null) {
+            this.protecaoTerceiro = dados.protecaoTerceiro();
+        }
+        if (dados.protecaoCausaNatural() != null) {
+            this.protecaoCausaNatural = dados.protecaoCausaNatural();
+        }
+        if (dados.protecaoRoubo() != null) {
+            this.protecaoRoubo = dados.protecaoRoubo();
+        }
     }
 }

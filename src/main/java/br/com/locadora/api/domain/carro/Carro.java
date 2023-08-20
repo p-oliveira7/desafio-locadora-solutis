@@ -3,6 +3,7 @@ package br.com.locadora.api.domain.carro;
 
 import br.com.locadora.api.domain.aluguel.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,10 +36,18 @@ public class Carro {
     @OneToOne(mappedBy = "carro")
     private Aluguel aluguel;
 
-    public Carro(String placa, String chassi, String cor, BigDecimal bigDecimal, Categoria categoria, Acessorio acessorio, ModeloCarro descricao, Fabricante nome) {
+    public Carro(String placa, String chassi, String cor, BigDecimal valorDiaria, Categoria categoria, @NotNull String acessorio, @NotNull String descricao, @NotNull String nome) {
+        this.placa = placa;
+        this.chassi = chassi;
+        this.cor = cor;
+        this.valorDiaria = valorDiaria;
+        this.categoria = categoria;
+        this.acessorio = String.valueOf(acessorio);
+        this.descricao = descricao;
+        this.nome = nome;
     }
 
-   /* public String getAcessorio() {
+    public String getAcessorio() {
         return acessorio;
     }
     public String getDescricao() {
@@ -47,17 +56,6 @@ public class Carro {
     public String getNome() {
         return nome;
     }
-
-
-public void Carro(String placa, String chassi, String cor, BigDecimal valorDiaria, Categoria categoria, String acessorio, String descricao, String nome) {
-        this.placa = placa;
-        this.chassi = chassi;
-        this.cor = cor;
-        this.valorDiaria = valorDiaria;
-        this.categoria = categoria;
-
-    }*/
-
 
 
 }

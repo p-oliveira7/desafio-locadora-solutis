@@ -27,13 +27,17 @@ public class Usuario implements UserDetails {
 
     private String senha;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "pessoa_id")
-//    private Pessoa pessoa;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
 
     public Usuario(String email, String senha) {
         this.email = email;
         this.senha = senha;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
     @Override

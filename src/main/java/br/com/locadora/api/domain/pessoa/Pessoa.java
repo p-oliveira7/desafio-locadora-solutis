@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING,
@@ -20,5 +21,15 @@ public abstract class Pessoa {
     private String cpf;
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
+
+    public abstract void atualizar(PessoaDTO pessoaAtualizada);
+    public String getDataDeNascimentoFormatada() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return this.getDataDeNascimento().format(dateFormatter);
+    }
+
+    public PessoaDTO toDTO() {
+        return new PessoaDTO(this.getNome(), getDataDeNascimentoFormatada(), this.getCpf(), this.getSexo().getDescricao(), null, null);
+    }
 
 }

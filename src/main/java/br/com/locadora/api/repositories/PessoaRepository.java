@@ -12,5 +12,9 @@ import java.util.Optional;
 public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
     Optional<Funcionario> findFuncionarioByCpf(String cpf);
     Optional<Motorista> findMotoristaByCpf(String cpf);
+
+    Optional<Pessoa> findPessoaById(Long id);
+
+    Optional<Pessoa> findByCpf(String cpf);
 }
 

@@ -1,6 +1,8 @@
 package br.com.locadora.api.services;
 
 import br.com.locadora.api.domain.pessoa.*;
+import br.com.locadora.api.domain.usuario.Usuario;
+import br.com.locadora.api.domain.usuario.UsuarioRepository;
 import br.com.locadora.api.mappers.PessoaMapper;
 import br.com.locadora.api.repositories.PessoaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +20,8 @@ public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Transactional(readOnly = true)
     public List<PessoaDTO> findAll() {
@@ -28,11 +32,13 @@ public class PessoaService {
     }
 
     @Transactional
-    public void cadastrarPessoa(@NotNull @Valid PessoaDTO pessoaDTO) {
-        Pessoa pessoa = pessoaDTO.converterDTOparaEntidade();
+    public void cadastrarPessoa(@NotNull @Valid PessoaDTO pessoaDTO, Usuario user) {
+        Pessoa pessoa = pessoaDTO.dtoToEntity();
 
         if (pessoa != null) {
-            pessoaRepository.save(pessoa); // Persiste a entidade no banco de dados
+            pessoaRepository.save(pessoa);
+            user.setPessoa(pessoa);
+            usuarioRepository.save(user);// Persiste a entidade no banco de dados
         } else {
             throw new IllegalArgumentException("A conversão do DTO para entidade Pessoa falhou.");
         }
@@ -56,27 +62,20 @@ public class PessoaService {
     }
 
     @Transactional
-    public void atualizarPessoa(String cpf, PessoaDTO pessoaDTO) {
-        Optional<Funcionario> funcionarioExistente = pessoaRepository.findFuncionarioByCpf(cpf);
-        if (funcionarioExistente.isPresent()) {
-            Pessoa pessoaAtualizada = pessoaDTO.converterDTOparaEntidade();
-            if (pessoaAtualizada instanceof Funcionario funcionarioAtualizado) {
-                funcionarioAtualizado.setId(funcionarioExistente.get().getId()); // Mantém o ID do funcionário existente
-                pessoaRepository.save(funcionarioAtualizado);
-                return;
-            }
-        }
+    public void atualizarPessoa(Usuario user, @Valid PessoaDTO pessoaDTO) {
+        Optional<Pessoa> pessoaExistente = pessoaRepository.findById(user.getPessoa().getId());
 
-        Optional<Motorista> motoristaExistente = pessoaRepository.findMotoristaByCpf(cpf);
-        if (motoristaExistente.isPresent()) {
-            Pessoa pessoaAtualizada = pessoaDTO.converterDTOparaEntidade();
-            if (pessoaAtualizada instanceof Motorista motoristaAtualizado) {
-                motoristaAtualizado.setId(motoristaExistente.get().getId()); // Mantém o ID do motorista existente
-                pessoaRepository.save(motoristaAtualizado);
-                return;
-            }
-        }
+        if (pessoaExistente.isPresent()) {
 
-        throw new EntityNotFoundException("Pessoa não encontrada com o CPF: " + cpf);
+            Pessoa pessoaAtualizada = pessoaDTO.dtoToEntity();
+            assert pessoaAtualizada != null;
+            pessoaAtualizada.setId(pessoaExistente.get().getId());
+            pessoaRepository.save(pessoaAtualizada);
+
+        } else {
+            throw new EntityNotFoundException("Pessoa não encontrada!");
+        }
     }
 }
+
+

@@ -9,7 +9,7 @@ public class AluguelMapper {
 
     public ListarCarrinhoDTO toListarCarrinhoDTO(Aluguel aluguel) {
         return new ListarCarrinhoDTO(
-                aluguel.getTemporaryId(),
+                aluguel.getId(),
                 aluguel.getCarro().getPlaca(),
                 aluguel.getDataPedido(),
                 aluguel.getDataEntrega(),
@@ -17,7 +17,8 @@ public class AluguelMapper {
                 aluguel.getApoliceSeguro().getValorFranquia(),
                 aluguel.getApoliceSeguro().getProtecaoTerceiro(),
                 aluguel.getApoliceSeguro().getProtecaoCausaNatural(),
-                aluguel.getApoliceSeguro().getProtecaoRoubo()
+                aluguel.getApoliceSeguro().getProtecaoRoubo(),
+                aluguel.getValorTotal()
         );
     }
 }

@@ -1,11 +1,13 @@
 package br.com.locadora.api.controllers;
 
 import br.com.locadora.api.domain.pessoa.PessoaDTO;
+import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.exceptions.ResponseMessage;
 import br.com.locadora.api.services.PessoaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,14 +25,14 @@ public class PessoaController {
     }
 
     @PostMapping("/pessoas")
-    public ResponseEntity<Object> cadastrarPessoa(@RequestBody @Valid PessoaDTO pessoaDTO) {
-        pessoaService.cadastrarPessoa(pessoaDTO);
+    public ResponseEntity<Object> cadastrarPessoa(@RequestBody @Valid PessoaDTO pessoaDTO, @AuthenticationPrincipal Usuario user) {
+        pessoaService.cadastrarPessoa(pessoaDTO, user);
         return ResponseEntity.ok(new ResponseMessage("Cadastro feito com sucesso."));
     }
 
-    @PutMapping("/pessoas/{cpf}")
-    public ResponseEntity<Object> atualizarPessoa(@PathVariable String cpf, @RequestBody @Valid PessoaDTO pessoaAtualizada) {
-        pessoaService.atualizarPessoa(cpf, pessoaAtualizada);
+    @PutMapping("/pessoas")
+    public ResponseEntity<Object> atualizarPessoa(@RequestBody @Valid PessoaDTO pessoaAtualizada, @AuthenticationPrincipal Usuario user) {
+        pessoaService.atualizarPessoa(user, pessoaAtualizada);
         return ResponseEntity.ok(new ResponseMessage("Cadastro atualizado com sucesso."));
     }
 
