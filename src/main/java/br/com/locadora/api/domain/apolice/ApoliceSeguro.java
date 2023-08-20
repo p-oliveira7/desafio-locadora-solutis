@@ -1,6 +1,5 @@
 package br.com.locadora.api.domain.apolice;
 
-import br.com.locadora.api.domain.aluguel.Aluguel;
 import jakarta.persistence.*;
 import lombok.*;
 
