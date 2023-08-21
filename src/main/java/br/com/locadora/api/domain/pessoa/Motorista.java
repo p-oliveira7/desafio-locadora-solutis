@@ -23,4 +23,9 @@ public class Motorista extends Pessoa {
         String dataDeNascimentoFormatada = this.getDataDeNascimentoFormatada();
         return new PessoaDTO(this.getNome(), dataDeNascimentoFormatada, this.getCpf(), this.getSexo().getDescricao(), null, this.getNumeroCNH());
     }
+
+    @Override
+    public String getNumeroCNH() {
+        return super.getNumeroCNH();
+    }
 }

@@ -25,4 +25,9 @@ public class Funcionario extends Pessoa {
         String dataDeNascimentoFormatada = this.getDataDeNascimentoFormatada();
         return new PessoaDTO(this.getNome(), dataDeNascimentoFormatada, this.getCpf(), this.getSexo().getDescricao(), this.getMatricula(), null);
     }
+
+    @Override
+    public String getMatricula() {
+        return super.getMatricula();
+    }
 }
