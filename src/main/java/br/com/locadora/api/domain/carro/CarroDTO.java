@@ -21,5 +21,8 @@ public record CarroDTO(
     @NotNull
     String descricao,
     @NotNull
-    String nome){
+    String nome,
+    @NotNull
+    String imagePath
+){
 }

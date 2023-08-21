@@ -7,6 +7,7 @@ import java.util.Date;
 public record ListarCarrinhoDTO(
         Long id,
         String placa,
+        String imagePath,
         Calendar dataPedido,
         Date dataEntrega,
 

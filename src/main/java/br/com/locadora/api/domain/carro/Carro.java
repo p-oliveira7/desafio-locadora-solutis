@@ -32,11 +32,12 @@ public class Carro {
     private String acessorio;
     private String descricao;
     private String nome;
+    private String imagePath;
 
     @OneToOne(mappedBy = "carro")
     private Aluguel aluguel;
 
-    public Carro(String placa, String chassi, String cor, BigDecimal valorDiaria, Categoria categoria, @NotNull String acessorio, @NotNull String descricao, @NotNull String nome) {
+    public Carro(String placa, String chassi, String cor, BigDecimal valorDiaria, Categoria categoria, @NotNull String acessorio, @NotNull String descricao, @NotNull String nome, String imagePath) {
         this.placa = placa;
         this.chassi = chassi;
         this.cor = cor;
@@ -45,6 +46,7 @@ public class Carro {
         this.acessorio = String.valueOf(acessorio);
         this.descricao = descricao;
         this.nome = nome;
+        this.imagePath = imagePath;
     }
 
     public String getAcessorio() {

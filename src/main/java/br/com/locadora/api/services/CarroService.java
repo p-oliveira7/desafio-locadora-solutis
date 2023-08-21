@@ -1,25 +1,32 @@
 package br.com.locadora.api.services;
 
 import br.com.locadora.api.domain.carro.*;
+import br.com.locadora.api.mappers.CarroMapper;
 import br.com.locadora.api.repositories.CarroRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CarroService {
 
     @Autowired
     private CarroRepository carroRepository;
+    @Autowired
+    private CarroMapper carroMapper;
 
-    public List<Carro> findAll() {
-
-        return carroRepository.findAll();
+    public Page<CarroResponseDTO> findAll(Pageable pageable) {
+        Page<Carro> carrosPage = carroRepository.findAll(pageable);
+        return carrosPage.map(carroMapper::toDto);
     }
 
     private Carro converterDTOparaEntidade(CarroDTO carroDTO) {
-        Carro carro = new Carro(carroDTO.placa(), carroDTO.chassi(), carroDTO.cor(), carroDTO.valorDiaria(), carroDTO.categoria(), carroDTO.acessorio(), carroDTO.descricao(), carroDTO.nome());
+        Carro carro = new Carro(carroDTO.placa(), carroDTO.chassi(), carroDTO.cor(), carroDTO.valorDiaria(), carroDTO.categoria(), carroDTO.acessorio(), carroDTO.descricao(), carroDTO.nome(), carroDTO.imagePath());
         return carro;
     }
 

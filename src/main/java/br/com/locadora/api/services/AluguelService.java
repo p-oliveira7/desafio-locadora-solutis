@@ -6,7 +6,7 @@ import br.com.locadora.api.domain.aluguel.ListarCarrinhoDTO;
 import br.com.locadora.api.domain.carro.Carro;
 import br.com.locadora.api.domain.pessoa.Pessoa;
 import br.com.locadora.api.domain.usuario.Usuario;
-import br.com.locadora.api.mappers.AluguelMapper;
+import br.com.locadora.api.mappers.impl.AluguelMapperImpl;
 import br.com.locadora.api.domain.aluguel.CartaoCreditoDTO;
 import br.com.locadora.api.repositories.AluguelRepository;
 import br.com.locadora.api.repositories.CarroRepository;
@@ -33,7 +33,7 @@ public class AluguelService {
     private AluguelRepository aluguelRepository;
 
     @Autowired
-    private AluguelMapper aluguelMapper;
+    private AluguelMapperImpl aluguelMapper;
 
     public ListarCarrinhoDTO addAluguel(Long idCarro, AluguelApoliceRequestDTO dto, Usuario user) {
         validarParametrosAddAluguel(dto, user);
@@ -47,14 +47,14 @@ public class AluguelService {
         Aluguel novoAluguel = criarNovoAluguel(dto, carro, pessoaAssociada);
         aluguelRepository.save(novoAluguel);
 
-        return aluguelMapper.toListarCarrinhoDTO(novoAluguel);
+        return aluguelMapper.toDto(novoAluguel);
     }
 
     public List<ListarCarrinhoDTO> listarAlugueisPagos(Usuario user) {
         List<Aluguel> alugueisPagosDoUsuario = aluguelRepository.findAlugueisByPessoaIdAndStatus(user.getPessoa().getId(), true);
 
         return alugueisPagosDoUsuario.stream()
-                .map(aluguelMapper::toListarCarrinhoDTO)
+                .map(aluguelMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +62,7 @@ public class AluguelService {
         List<Aluguel> alugueisDoUsuario = aluguelRepository.findAlugueisByPessoaIdAndStatus(user.getPessoa().getId(), false);
 
         return alugueisDoUsuario.stream()
-                .map(aluguelMapper::toListarCarrinhoDTO)
+                .map(aluguelMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -70,7 +70,7 @@ public class AluguelService {
         Aluguel aluguelExistente = buscarAluguelPorIdEUsuario(id, user);
         aluguelExistente.atualizarInformacoes(aluguelAtualizacaoDTO);
         aluguelRepository.save(aluguelExistente);
-        return aluguelMapper.toListarCarrinhoDTO(aluguelExistente);
+        return aluguelMapper.toDto(aluguelExistente);
     }
 
     public void apagarItem(Long id, Usuario user) {

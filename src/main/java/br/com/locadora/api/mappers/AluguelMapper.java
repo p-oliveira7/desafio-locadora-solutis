@@ -2,23 +2,9 @@ package br.com.locadora.api.mappers;
 
 import br.com.locadora.api.domain.aluguel.Aluguel;
 import br.com.locadora.api.domain.aluguel.ListarCarrinhoDTO;
-import org.springframework.stereotype.Component;
+import br.com.locadora.api.domain.carro.Carro;
+import br.com.locadora.api.domain.carro.CarroResponseDTO;
 
-@Component
-public class AluguelMapper {
-
-    public ListarCarrinhoDTO toListarCarrinhoDTO(Aluguel aluguel) {
-        return new ListarCarrinhoDTO(
-                aluguel.getId(),
-                aluguel.getCarro().getPlaca(),
-                aluguel.getDataPedido(),
-                aluguel.getDataEntrega(),
-                aluguel.getDataDevolucao(),
-                aluguel.getApoliceSeguro().getValorFranquia(),
-                aluguel.getApoliceSeguro().getProtecaoTerceiro(),
-                aluguel.getApoliceSeguro().getProtecaoCausaNatural(),
-                aluguel.getApoliceSeguro().getProtecaoRoubo(),
-                aluguel.getValorTotal()
-        );
-    }
+public interface AluguelMapper {
+    ListarCarrinhoDTO toDto(Aluguel aluguel);
 }

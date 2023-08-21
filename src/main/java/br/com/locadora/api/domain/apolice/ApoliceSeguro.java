@@ -19,16 +19,32 @@ public class ApoliceSeguro {
     private Boolean protecaoRoubo;
 
     public ApoliceSeguro(ApoliceSeguroRequestDTO dados) {
-        this.valorFranquia = dados.valorFranquia();
         this.protecaoTerceiro = dados.protecaoTerceiro();
         this.protecaoCausaNatural = dados.protecaoCausaNatural();
         this.protecaoRoubo = dados.protecaoRoubo();
+
+    }
+    public BigDecimal calcularValorFranquia(BigDecimal valorTotalAluguel) {
+        BigDecimal porcentagem = BigDecimal.ZERO;
+
+        if (protecaoTerceiro) {
+            porcentagem = porcentagem.add(BigDecimal.valueOf(0.01));
+        }
+        if (protecaoCausaNatural) {
+            porcentagem = porcentagem.add(BigDecimal.valueOf(0.02));
+        }
+        if (protecaoRoubo) {
+            porcentagem = porcentagem.add(BigDecimal.valueOf(0.05));
+        }
+
+        BigDecimal valorFranquiaCalculado = valorTotalAluguel.multiply(porcentagem);
+        this.valorFranquia = valorFranquiaCalculado;
+        return valorFranquiaCalculado;
     }
 
+
+
     public void atualizarInformacoes(ApoliceSeguroRequestDTO dados) {
-        if (dados.valorFranquia() != null) {
-            this.valorFranquia = dados.valorFranquia();
-        }
         if (dados.protecaoTerceiro() != null) {
             this.protecaoTerceiro = dados.protecaoTerceiro();
         }

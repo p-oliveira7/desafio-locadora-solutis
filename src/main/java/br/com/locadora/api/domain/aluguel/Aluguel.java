@@ -49,13 +49,17 @@ public class Aluguel {
         if (dataEntrega != null && dataDevolucao != null) {
             long diasAlugados = ChronoUnit.DAYS.between(dataEntrega.toInstant(), dataDevolucao.toInstant()) + 1;
             BigDecimal valorDiarias = carro.getValorDiaria().multiply(BigDecimal.valueOf(diasAlugados));
-            if (apoliceSeguro.getValorFranquia() != null) {
-                valorTotal = valorDiarias.add(apoliceSeguro.getValorFranquia());
-            } else {
-                valorTotal = valorDiarias;
+            BigDecimal valorTotalCalculado = valorDiarias;
+
+            if (apoliceSeguro != null) {
+                BigDecimal valorFranquia = apoliceSeguro.calcularValorFranquia(valorTotalCalculado);
+                valorTotalCalculado = valorTotalCalculado.add(valorFranquia);
             }
+
+            this.valorTotal = valorTotalCalculado;
         }
     }
+
     public Aluguel(AluguelApoliceRequestDTO dados, Carro carro) {
         this.dataPedido = dados.dataPedido();
         this.dataEntrega = dados.dataEntrega();

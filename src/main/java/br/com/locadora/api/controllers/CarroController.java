@@ -3,6 +3,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.locadora.api.domain.carro.*;
@@ -21,9 +23,9 @@ public class CarroController {
 
     @Operation(summary = "Obter todos os carros")
     @GetMapping("/carros")
-    public ResponseEntity<List<Carro>> findAll() {
+    public ResponseEntity<Page<CarroResponseDTO>> findAll(Pageable pageable) {
         try{
-        List<Carro> carros = carroService.findAll();
+        Page<CarroResponseDTO> carros = carroService.findAll(pageable);
         return ResponseEntity.ok(carros);
         } catch (Exception e) {
             logger.error("Erro ao obter todos os carros: " + e.getMessage());
