@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +46,8 @@ public class AluguelController {
 
     @Operation(summary = "Listar aluguéis no carrinho")
     @GetMapping("carrinho")
-    public List<ListarCarrinhoDTO> listar(@AuthenticationPrincipal Usuario user) {
-        return aluguelService.listar(user);
+    public Page<ListarCarrinhoDTO> listar(@AuthenticationPrincipal Usuario user, Pageable pageable) {
+        return aluguelService.listar(user, pageable);
     }
 
     @Operation(summary = "Atualizar um aluguel no carrinho")
@@ -97,9 +99,9 @@ try{
 
     @Operation(summary = "Listar aluguéis pagos")
     @GetMapping("/pagos")
-    public ResponseEntity<List<ListarCarrinhoDTO>> listarAlugueisPagos(@AuthenticationPrincipal Usuario user) {
+    public ResponseEntity<Page<ListarCarrinhoDTO>> listarAlugueisPagos(@AuthenticationPrincipal Usuario user, Pageable pageable) {
         try{
-        List<ListarCarrinhoDTO> alugueisPagos = aluguelService.listarAlugueisPagos(user);
+        Page<ListarCarrinhoDTO> alugueisPagos = aluguelService.listarAlugueisPagos(user, pageable);
         return ResponseEntity.ok(alugueisPagos);
         } catch (Exception e) {
             logger.error("Erro ao listar aluguéis pagos: " + e.getMessage());

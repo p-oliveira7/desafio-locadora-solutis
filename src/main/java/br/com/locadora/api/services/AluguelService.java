@@ -13,6 +13,8 @@ import br.com.locadora.api.repositories.CarroRepository;
 import br.com.locadora.api.repositories.PessoaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -50,20 +52,16 @@ public class AluguelService {
         return aluguelMapper.toDto(novoAluguel);
     }
 
-    public List<ListarCarrinhoDTO> listarAlugueisPagos(Usuario user) {
-        List<Aluguel> alugueisPagosDoUsuario = aluguelRepository.findAlugueisByPessoaIdAndStatus(user.getPessoa().getId(), true);
+    public Page<ListarCarrinhoDTO> listarAlugueisPagos(Usuario user, Pageable pageable) {
+        Page<Aluguel> alugueisPagosDoUsuario = aluguelRepository.findAlugueisByPessoaIdAndStatus(user.getPessoa().getId(), true, pageable);
 
-        return alugueisPagosDoUsuario.stream()
-                .map(aluguelMapper::toDto)
-                .collect(Collectors.toList());
+        return alugueisPagosDoUsuario.map(aluguelMapper::toDto);
     }
 
-    public List<ListarCarrinhoDTO> listar(Usuario user) {
-        List<Aluguel> alugueisDoUsuario = aluguelRepository.findAlugueisByPessoaIdAndStatus(user.getPessoa().getId(), false);
+    public Page<ListarCarrinhoDTO> listar(Usuario user, Pageable pageable) {
+        Page<Aluguel> alugueisDoUsuario = aluguelRepository.findAlugueisByPessoaIdAndStatus(user.getPessoa().getId(), false, pageable);
 
-        return alugueisDoUsuario.stream()
-                .map(aluguelMapper::toDto)
-                .collect(Collectors.toList());
+        return alugueisDoUsuario.map(aluguelMapper::toDto);
     }
 
     public ListarCarrinhoDTO atualizarCarrinho(Usuario user, Long id, AluguelApoliceRequestDTO aluguelAtualizacaoDTO) {
