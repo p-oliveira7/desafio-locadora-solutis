@@ -6,11 +6,11 @@ import br.com.locadora.api.repositories.CarroRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import br.com.locadora.api.domain.carro.CarroResponseDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CarroService {
@@ -19,6 +19,7 @@ public class CarroService {
     private CarroRepository carroRepository;
     @Autowired
     private CarroMapper carroMapper;
+
 
     public Page<CarroResponseDTO> findAll(Pageable pageable) {
         Page<Carro> carrosPage = carroRepository.findAll(pageable);
@@ -44,35 +45,38 @@ public class CarroService {
         }
     }
 
-    public List<Carro> listarCarrosPorCategoria(Categoria categoria){
-        List<Carro> carros = carroRepository.findAll();
+    public Page<CarroResponseDTO> listarCarrosPorCategoria(Categoria categoria, Pageable pageable) {
+        Page<Carro> carrosPage = carroRepository.findByCategoria(categoria, pageable);
 
-        carros.removeIf(carro -> !carro.getCategoria().equals(categoria));
-        return carros;
+        Page<CarroResponseDTO> carrosResponsePage = carrosPage.map(carroMapper::toDto);
+
+        return carrosResponsePage;
+    }
+
+    public Page<CarroResponseDTO> listarCarrosPorModelo(String descricao, Pageable pageable) {
+        Page<Carro> carrosPage = carroRepository.findByDescricao(descricao, pageable);
+
+        Page<CarroResponseDTO> carrosResponsePage = carrosPage.map(carroMapper::toDto);
+
+        return carrosResponsePage;
     }
 
 
-    public List<Carro> listarCarrosPorModelo(String descricao){
-        List<Carro> carros = carroRepository.findAll();
+    public Page<CarroResponseDTO> listarCarrosPorAcessorios(String acessorio, Pageable pageable) {
+        Page<Carro> carrosPage = carroRepository.findByAcessorio(acessorio, pageable);
 
-        carros.removeIf(carro -> !carro.getDescricao().equals(descricao));
-        return carros;
+        Page<CarroResponseDTO> carrosResponsePage = carrosPage.map(carroMapper::toDto);
+
+        return carrosResponsePage;
     }
 
 
-  public List<Carro> listarCarrosPorAcessorios(String acessorio){
-        List<Carro> carros = carroRepository.findAll();
+    public Page<CarroResponseDTO> listarCarrosPorFabricante(String nome, Pageable pageable) {
+        Page<Carro> carrosPage = carroRepository.findByNome(nome, pageable);
 
-        carros.removeIf(carro -> !carro.getAcessorio().equals(acessorio));
-        return carros;
-        }
+        Page<CarroResponseDTO> carrosResponsePage = carrosPage.map(carroMapper::toDto);
 
-
-    public List<Carro> listarCarrosPorFabricante(String nome){
-        List<Carro> carros = carroRepository.findAll();
-
-        carros.removeIf(carro -> !carro.getNome().equals(nome));
-        return carros;
+        return carrosResponsePage;
     }
 
     }

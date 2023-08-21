@@ -35,12 +35,12 @@ public class CarroController {
 
     @Operation(summary = "Listar carros por categoria")
     @GetMapping("/carros/categoria/{categoria}")
-    public ResponseEntity<List<Carro>> listarCarrosPorCategoria(
+    public ResponseEntity<Page<CarroResponseDTO>> listarCarrosPorCategoria(
             @Parameter(description = "Categoria dos carros a serem listados", required = true)
-            @PathVariable Categoria categoria) {
+            @PathVariable Categoria categoria, Pageable pageable) {
         try {
-            List<Carro> carros = carroService.listarCarrosPorCategoria(categoria);
-            return ResponseEntity.ok(carros);
+            Page<CarroResponseDTO> carrosPage = carroService.listarCarrosPorCategoria(categoria, pageable);
+            return ResponseEntity.ok(carrosPage);
         } catch (Exception e) {
             logger.error("Erro ao listar carros por categoria: " + e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -49,12 +49,12 @@ public class CarroController {
 
     @Operation(summary = "Listar carros por fabricante")
     @GetMapping("/carros/fabricante/{nome}")
-    public ResponseEntity<List<Carro>> listarCarrosPorFabricante(
+    public ResponseEntity<Page<CarroResponseDTO>> listarCarrosPorFabricante(
             @Parameter(description = "Nome do fabricante dos carros a serem listados", required = true)
-            @PathVariable String nome) {
+            @PathVariable String nome, Pageable pageable) {
         try {
-            List<Carro> carros = carroService.listarCarrosPorFabricante(nome);
-            return ResponseEntity.ok(carros);
+            Page<CarroResponseDTO> carrosPage = carroService.listarCarrosPorFabricante(nome, pageable);
+            return ResponseEntity.ok(carrosPage);
         } catch (Exception e) {
             logger.error("Erro ao listar carros por fabricante: " + e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -63,12 +63,12 @@ public class CarroController {
 
     @Operation(summary = "Listar carros por acessório")
     @GetMapping("/carros/acessorios/{acessorio}")
-    public ResponseEntity<List<Carro>> listarCarrosPorAcessorios(
+    public ResponseEntity<Page<CarroResponseDTO>> listarCarrosPorAcessorios(
             @Parameter(description = "Nome do acessório dos carros a serem listados", required = true)
-            @PathVariable String acessorio) {
+            @PathVariable String acessorio, Pageable pageable) {
         try {
-            List<Carro> carros = carroService.listarCarrosPorAcessorios(acessorio);
-            return ResponseEntity.ok(carros);
+            Page<CarroResponseDTO> carrosPage = carroService.listarCarrosPorAcessorios(acessorio, pageable);
+            return ResponseEntity.ok(carrosPage);
         } catch (Exception e) {
             logger.error("Erro ao listar carros por acessório: " + e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -77,12 +77,12 @@ public class CarroController {
 
     @Operation(summary = "Listar carros por modelo")
     @GetMapping("/carros/modelo/{descricao}")
-    public ResponseEntity<List<Carro>> listarCarrosPorModelo(
+    public ResponseEntity<Page<CarroResponseDTO>> listarCarrosPorModelo(
             @Parameter(description = "Descrição do modelo dos carros a serem listados", required = true)
-            @PathVariable String descricao) {
+            @PathVariable String descricao, Pageable pageable) {
         try {
-            List<Carro> carros = carroService.listarCarrosPorModelo(descricao);
-            return ResponseEntity.ok(carros);
+            Page<CarroResponseDTO> carrosPage = carroService.listarCarrosPorModelo(descricao, pageable);
+            return ResponseEntity.ok(carrosPage);
         } catch (Exception e) {
             logger.error("Erro ao listar carros por modelo: " + e.getMessage());
             return ResponseEntity.badRequest().build();
