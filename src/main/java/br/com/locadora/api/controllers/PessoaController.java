@@ -1,5 +1,6 @@
 package br.com.locadora.api.controllers;
 
+import br.com.locadora.api.domain.pessoa.PessoaResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
@@ -11,6 +12,8 @@ import br.com.locadora.api.domain.pessoa.PessoaDTO;
 import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.exceptions.ResponseMessage;
 import br.com.locadora.api.services.PessoaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -26,10 +29,10 @@ public class PessoaController {
 
     @Operation(summary = "Obter todas as pessoas")
     @GetMapping("/pessoas")
-    public ResponseEntity<List<PessoaDTO>> findAll() {
+    public ResponseEntity<Page<PessoaResponseDTO>> findAll(Pageable pageable) {
         try {
-            List<PessoaDTO> pessoasDTO = pessoaService.listarPessoas();
-            return ResponseEntity.ok(pessoasDTO);
+            Page<PessoaResponseDTO> pessoasDTOPage = pessoaService.listarPessoas(pageable);
+            return ResponseEntity.ok(pessoasDTOPage);
         } catch (Exception e) {
             logger.error("Erro ao obter todas as pessoas: " + e.getMessage());
             return ResponseEntity.badRequest().build();

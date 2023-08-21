@@ -3,10 +3,13 @@ package br.com.locadora.api.services;
 import br.com.locadora.api.domain.pessoa.*;
 import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.domain.usuario.UsuarioRepository;
+import br.com.locadora.api.mappers.PessoaMapper;
 import br.com.locadora.api.repositories.PessoaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,15 +26,15 @@ public class PessoaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    private PessoaMapper pessoaMapper;
+
     @Transactional(readOnly = true)
-    public List<PessoaDTO> listarPessoas() {
-        List<Pessoa> pessoas = pessoaRepository.findAll();
-        List<PessoaDTO> dtos = new ArrayList<>();
-        for (Pessoa pessoa : pessoas) {
-            PessoaDTO dto = pessoa.toDTO();
-            dtos.add(dto);
-        }
-        return dtos;
+    public Page<PessoaResponseDTO> listarPessoas(Pageable pageable) {
+        Page<Pessoa> pessoasPage = pessoaRepository.findAll(pageable);
+
+        Page<PessoaResponseDTO> pessoasResponsePage = pessoasPage.map(pessoaMapper::toDto);
+
+        return pessoasResponsePage;
     }
 
     @Transactional
