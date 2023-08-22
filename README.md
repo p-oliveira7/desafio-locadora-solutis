@@ -35,7 +35,7 @@ git clone https://github.com/p-oliveira7/desafio-locadora-solutis.git
 2. Acesse o diretório do projeto:
 
 ```
-cd locadora
+cd desafio-locadora-solutis
 ```
 
 3. Crie um banco de dados MySQL chamado `locadora`:
