@@ -33,7 +33,7 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.POST, "locadora/carros").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.DELETE, "locadora/carros").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.POST, "locadora/add").hasRole("USER");
-                    req.requestMatchers(HttpMethod.GET, "locadora/carros").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "locadora/carros/**").permitAll();
                     req.requestMatchers( "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     req.anyRequest().authenticated();
                 })
