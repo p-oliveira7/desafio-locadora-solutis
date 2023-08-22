@@ -2,6 +2,7 @@ package br.com.locadora.api.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("locadora")
+@SecurityRequirement(name = "bearer-key")
 public class AluguelController {
     private static final Logger logger = LoggerFactory.getLogger(AluguelController.class);
     @Autowired

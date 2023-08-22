@@ -3,6 +3,7 @@ package br.com.locadora.api.controllers;
 import br.com.locadora.api.domain.pessoa.PessoaResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/locadora/")
+@SecurityRequirement(name = "bearer-key")
 public class PessoaController {
     private static final Logger logger = LoggerFactory.getLogger(PessoaController.class);
     @Autowired
