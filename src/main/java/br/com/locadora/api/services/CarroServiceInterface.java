@@ -1,4 +1,4 @@
-package br.com.locadora.api.services.interfaces;
+package br.com.locadora.api.services;
 
 import br.com.locadora.api.domain.carro.*;
 import org.springframework.data.domain.Page;
@@ -7,6 +7,9 @@ import org.springframework.data.domain.Pageable;
 public interface CarroServiceInterface {
 
     Page<CarroResponseDTO> findAll(Pageable pageable);
+    void cadastrarCarro(CarroDTO carroDTO);
+
+    void deletarCarro(Long id);
 
     Page<CarroResponseDTO> listarCarrosPorCategoria(Categoria categoria, Pageable pageable);
 

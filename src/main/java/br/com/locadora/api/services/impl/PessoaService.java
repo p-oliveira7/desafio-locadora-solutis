@@ -1,11 +1,11 @@
-package br.com.locadora.api.services;
+package br.com.locadora.api.services.impl;
 
 import br.com.locadora.api.domain.pessoa.*;
 import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.domain.usuario.UsuarioRepository;
 import br.com.locadora.api.mappers.PessoaMapper;
 import br.com.locadora.api.repositories.PessoaRepository;
-import br.com.locadora.api.services.interfaces.PessoaServiceInterface;
+import br.com.locadora.api.services.PessoaServiceInterface;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service

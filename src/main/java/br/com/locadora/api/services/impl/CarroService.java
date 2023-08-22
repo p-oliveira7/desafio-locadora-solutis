@@ -1,9 +1,9 @@
-package br.com.locadora.api.services;
+package br.com.locadora.api.services.impl;
 
 import br.com.locadora.api.domain.carro.*;
 import br.com.locadora.api.mappers.CarroMapper;
 import br.com.locadora.api.repositories.CarroRepository;
-import br.com.locadora.api.services.interfaces.CarroServiceInterface;
+import br.com.locadora.api.services.CarroServiceInterface;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,12 +30,12 @@ public class CarroService implements CarroServiceInterface {
         Carro carro = new Carro(carroDTO.placa(), carroDTO.chassi(), carroDTO.cor(), carroDTO.valorDiaria(), carroDTO.categoria(), carroDTO.acessorio(), carroDTO.descricao(), carroDTO.nome(), carroDTO.imagePath());
         return carro;
     }
-
+    @Override
     public void cadastrarCarro(CarroDTO carroDTO) {
         Carro carro = converterDTOparaEntidade(carroDTO);
         carroRepository.save(carro);
     }
-
+    @Override
     public void deletarCarro(Long id) {
         Carro carro = carroRepository.findById(id).orElse(null);
         if (carro != null) {

@@ -1,4 +1,4 @@
-package br.com.locadora.api.services.interfaces;
+package br.com.locadora.api.services;
 import br.com.locadora.api.domain.aluguel.CartaoCreditoDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

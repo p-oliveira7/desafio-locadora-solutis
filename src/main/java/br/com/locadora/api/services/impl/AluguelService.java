@@ -1,4 +1,4 @@
-package br.com.locadora.api.services;
+package br.com.locadora.api.services.impl;
 
 import br.com.locadora.api.domain.aluguel.Aluguel;
 import br.com.locadora.api.domain.aluguel.AluguelApoliceRequestDTO;
@@ -11,7 +11,7 @@ import br.com.locadora.api.domain.aluguel.CartaoCreditoDTO;
 import br.com.locadora.api.repositories.AluguelRepository;
 import br.com.locadora.api.repositories.CarroRepository;
 import br.com.locadora.api.repositories.PessoaRepository;
-import br.com.locadora.api.services.interfaces.AluguelServiceInterface;
+import br.com.locadora.api.services.AluguelServiceInterface;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AluguelService implements AluguelServiceInterface {

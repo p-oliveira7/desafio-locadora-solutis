@@ -1,5 +1,6 @@
 package br.com.locadora.api.controllers;
 
+import br.com.locadora.api.services.AluguelServiceInterface;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -15,19 +16,17 @@ import br.com.locadora.api.domain.aluguel.CartaoCreditoDTO;
 import br.com.locadora.api.domain.aluguel.ListarCarrinhoDTO;
 import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.exceptions.ResponseMessage;
-import br.com.locadora.api.services.AluguelService;
 
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("locadora")
 @SecurityRequirement(name = "bearer-key")
-public class AluguelController {
+public class AluguelController{
     private static final Logger logger = LoggerFactory.getLogger(AluguelController.class);
     @Autowired
-    private AluguelService aluguelService;
+    private AluguelServiceInterface aluguelService;
 
     @Operation(summary = "Adicionar um novo aluguel ao carrinho")
     @PostMapping("add")

@@ -1,4 +1,5 @@
 package br.com.locadora.api.controllers;
+import br.com.locadora.api.services.CarroServiceInterface;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -10,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.locadora.api.domain.carro.*;
 import br.com.locadora.api.exceptions.ResponseMessage;
-import br.com.locadora.api.services.CarroService;
 
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 @RestController
@@ -21,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public class CarroController {
     private static final Logger logger = LoggerFactory.getLogger(CarroController.class);
     @Autowired
-    private CarroService carroService;
+    private CarroServiceInterface carroService;
 
     @Operation(summary = "Obter todos os carros")
     @GetMapping("/carros")

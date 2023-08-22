@@ -1,6 +1,7 @@
 package br.com.locadora.api.controllers;
 
 import br.com.locadora.api.domain.pessoa.PessoaResponseDTO;
+import br.com.locadora.api.services.PessoaServiceInterface;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -12,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import br.com.locadora.api.domain.pessoa.PessoaDTO;
 import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.exceptions.ResponseMessage;
-import br.com.locadora.api.services.PessoaService;
+import br.com.locadora.api.services.impl.PessoaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class PessoaController {
     private static final Logger logger = LoggerFactory.getLogger(PessoaController.class);
     @Autowired
-    private PessoaService pessoaService;
+    private PessoaServiceInterface pessoaService;
 
     @Operation(summary = "Obter todas as pessoas")
     @GetMapping("/pessoas")
