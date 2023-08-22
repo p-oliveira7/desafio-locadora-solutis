@@ -14,6 +14,7 @@ Este repositório contém o código fonte do projeto de uma Locadora de Veículo
 - Spring Data JPA
 - MySQL
 - Maven
+- Swagger
 
 ## Visão Geral do Projeto
 
@@ -24,8 +25,8 @@ O projeto tem como objetivo criar uma plataforma de locação de veículos. Atra
 - Java Development Kit (JDK) versão 20 ou superior
 - Maven
 - MySQL Server
-  
- ### Passos para Execução
+
+### Passos para Execução
 
 1. Clone o repositório:
 
@@ -57,6 +58,14 @@ spring.datasource.password=SUA_SENHA
 ```bash
 mvn spring-boot:run
 ```
+
+6. Acesso à Documentação da API
+
+Após a execução bem-sucedida do aplicativo, você pode acessar a documentação da API através do Swagger. Abra o seu navegador e acesse o seguinte URL:
+
+    http://localhost:8080/swagger-ui.html
+
+A documentação da API Swagger fornecerá detalhes sobre os endpoints disponíveis, seus parâmetros e exemplos de solicitações.
 
 ## Estrutura do Projeto
 
