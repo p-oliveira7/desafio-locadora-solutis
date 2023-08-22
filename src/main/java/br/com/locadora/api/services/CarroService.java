@@ -3,6 +3,7 @@ package br.com.locadora.api.services;
 import br.com.locadora.api.domain.carro.*;
 import br.com.locadora.api.mappers.CarroMapper;
 import br.com.locadora.api.repositories.CarroRepository;
+import br.com.locadora.api.services.interfaces.CarroServiceInterface;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class CarroService {
+public class CarroService implements CarroServiceInterface {
 
     @Autowired
     private CarroRepository carroRepository;

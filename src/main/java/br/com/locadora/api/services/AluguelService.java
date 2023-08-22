@@ -11,6 +11,7 @@ import br.com.locadora.api.domain.aluguel.CartaoCreditoDTO;
 import br.com.locadora.api.repositories.AluguelRepository;
 import br.com.locadora.api.repositories.CarroRepository;
 import br.com.locadora.api.repositories.PessoaRepository;
+import br.com.locadora.api.services.interfaces.AluguelServiceInterface;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class AluguelService {
+public class AluguelService implements AluguelServiceInterface {
     @Autowired
     private PessoaRepository pessoaRepository;
 

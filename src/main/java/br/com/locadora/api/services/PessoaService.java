@@ -5,6 +5,7 @@ import br.com.locadora.api.domain.usuario.Usuario;
 import br.com.locadora.api.domain.usuario.UsuarioRepository;
 import br.com.locadora.api.mappers.PessoaMapper;
 import br.com.locadora.api.repositories.PessoaRepository;
+import br.com.locadora.api.services.interfaces.PessoaServiceInterface;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PessoaService {
+public class PessoaService implements PessoaServiceInterface {
 
     @Autowired
     private PessoaRepository pessoaRepository;
