@@ -30,7 +30,12 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
-                    req.anyRequest().permitAll();
+                    req.requestMatchers(HttpMethod.POST, "locadora/carros").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.DELETE, "locadora/carros").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.POST, "locadora/add").hasRole("USER");
+                    req.requestMatchers(HttpMethod.GET, "locadora/carros").permitAll();
+                    req.requestMatchers( "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
+                    req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
