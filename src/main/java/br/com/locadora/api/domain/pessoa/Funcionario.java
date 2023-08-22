@@ -20,7 +20,7 @@ public class Funcionario extends Pessoa {
             this.setMatricula(pessoaAtualizada.matricula());
         }
     }
-    @Override
+
     public PessoaDTO toDTO() {
         String dataDeNascimentoFormatada = this.getDataDeNascimentoFormatada();
         return new PessoaDTO(this.getNome(), dataDeNascimentoFormatada, this.getCpf(), this.getSexo().getDescricao(), this.getMatricula(), null);

@@ -18,7 +18,7 @@ public class Motorista extends Pessoa {
                 this.setNumeroCNH(pessoaAtualizada.numeroCNH());
             }
         }
-    @Override
+
     public PessoaDTO toDTO() {
         String dataDeNascimentoFormatada = this.getDataDeNascimentoFormatada();
         return new PessoaDTO(this.getNome(), dataDeNascimentoFormatada, this.getCpf(), this.getSexo().getDescricao(), null, this.getNumeroCNH());
