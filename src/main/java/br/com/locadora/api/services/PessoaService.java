@@ -28,7 +28,7 @@ public class PessoaService implements PessoaServiceInterface {
     private UsuarioRepository usuarioRepository;
 
     private PessoaMapper pessoaMapper;
-
+    @Override
     @Transactional(readOnly = true)
     public Page<PessoaResponseDTO> listarPessoas(Pageable pageable) {
         Page<Pessoa> pessoasPage = pessoaRepository.findAll(pageable);
@@ -37,7 +37,7 @@ public class PessoaService implements PessoaServiceInterface {
 
         return pessoasResponsePage;
     }
-
+    @Override
     @Transactional
     public void cadastrarPessoa(@NotNull @Valid PessoaDTO pessoaDTO, Usuario user) {
         Pessoa pessoa = pessoaDTO.dtoToEntity();
@@ -50,7 +50,7 @@ public class PessoaService implements PessoaServiceInterface {
             throw new IllegalArgumentException("A conversão do DTO para entidade Pessoa falhou.");
         }
     }
-
+    @Override
     @Transactional
     public void deletarPessoa(Usuario user) {
         Optional<Pessoa> pessoaExistente = pessoaRepository.findById(user.getPessoa().getId());
@@ -65,7 +65,7 @@ public class PessoaService implements PessoaServiceInterface {
         throw new EntityNotFoundException("Pessoa não encontrada!");
     }
 
-
+    @Override
     @Transactional
     public void atualizarPessoa(Usuario user, @Valid PessoaDTO pessoaDTO) {
         Optional<Pessoa> pessoaExistente = pessoaRepository.findById(user.getPessoa().getId());

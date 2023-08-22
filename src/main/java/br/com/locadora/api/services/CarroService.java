@@ -7,7 +7,6 @@ import br.com.locadora.api.services.interfaces.CarroServiceInterface;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import br.com.locadora.api.domain.carro.CarroResponseDTO;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class CarroService implements CarroServiceInterface {
     @Autowired
     private CarroMapper carroMapper;
 
-
+    @Override
     public Page<CarroResponseDTO> findAll(Pageable pageable) {
         Page<Carro> carrosPage = carroRepository.findAll(pageable);
         return carrosPage.map(carroMapper::toDto);
@@ -45,7 +44,7 @@ public class CarroService implements CarroServiceInterface {
             throw new EntityNotFoundException("Carro não encontrado!");
         }
     }
-
+    @Override
     public Page<CarroResponseDTO> listarCarrosPorCategoria(Categoria categoria, Pageable pageable) {
         Page<Carro> carrosPage = carroRepository.findByCategoria(categoria, pageable);
 
@@ -53,7 +52,7 @@ public class CarroService implements CarroServiceInterface {
 
         return carrosResponsePage;
     }
-
+    @Override
     public Page<CarroResponseDTO> listarCarrosPorModelo(String descricao, Pageable pageable) {
         Page<Carro> carrosPage = carroRepository.findByDescricao(descricao, pageable);
 
@@ -62,7 +61,7 @@ public class CarroService implements CarroServiceInterface {
         return carrosResponsePage;
     }
 
-
+    @Override
     public Page<CarroResponseDTO> listarCarrosPorAcessorios(String acessorio, Pageable pageable) {
         Page<Carro> carrosPage = carroRepository.findByAcessorio(acessorio, pageable);
 
@@ -71,7 +70,7 @@ public class CarroService implements CarroServiceInterface {
         return carrosResponsePage;
     }
 
-
+    @Override
     public Page<CarroResponseDTO> listarCarrosPorFabricante(String nome, Pageable pageable) {
         Page<Carro> carrosPage = carroRepository.findByNome(nome, pageable);
 

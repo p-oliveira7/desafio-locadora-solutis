@@ -37,7 +37,7 @@ public class AluguelService implements AluguelServiceInterface {
 
     @Autowired
     private AluguelMapperImpl aluguelMapper;
-
+    @Override
     public ListarCarrinhoDTO addAluguel(Long idCarro, AluguelApoliceRequestDTO dto, Usuario user) {
         validarParametrosAddAluguel(dto, user);
 
@@ -52,31 +52,31 @@ public class AluguelService implements AluguelServiceInterface {
 
         return aluguelMapper.toDto(novoAluguel);
     }
-
+    @Override
     public Page<ListarCarrinhoDTO> listarAlugueisPagos(Usuario user, Pageable pageable) {
         Page<Aluguel> alugueisPagosDoUsuario = aluguelRepository.findAlugueisByPessoaIdAndStatus(user.getPessoa().getId(), true, pageable);
 
         return alugueisPagosDoUsuario.map(aluguelMapper::toDto);
     }
-
+    @Override
     public Page<ListarCarrinhoDTO> listar(Usuario user, Pageable pageable) {
         Page<Aluguel> alugueisDoUsuario = aluguelRepository.findAlugueisByPessoaIdAndStatus(user.getPessoa().getId(), false, pageable);
 
         return alugueisDoUsuario.map(aluguelMapper::toDto);
     }
-
+    @Override
     public ListarCarrinhoDTO atualizarCarrinho(Usuario user, Long id, AluguelApoliceRequestDTO aluguelAtualizacaoDTO) {
         Aluguel aluguelExistente = buscarAluguelPorIdEUsuario(id, user);
         aluguelExistente.atualizarInformacoes(aluguelAtualizacaoDTO);
         aluguelRepository.save(aluguelExistente);
         return aluguelMapper.toDto(aluguelExistente);
     }
-
+    @Override
     public void apagarItem(Long id, Usuario user) {
         Aluguel aluguelExistente = buscarAluguelPorIdEUsuario(id, user);
         aluguelRepository.delete(aluguelExistente);
     }
-
+    @Override
     public void pagarAluguel(Long idAluguel, Usuario user, CartaoCreditoDTO cartaoCreditoDTO) {
         validarParametrosPagamento(idAluguel, user, cartaoCreditoDTO);
 
