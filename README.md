@@ -59,7 +59,7 @@ spring.datasource.password=SUA_SENHA
 mvn spring-boot:run
 ```
 
-6. Acesso à Documentação da API
+## Acesso à Documentação da API
 
 Após a execução bem-sucedida do aplicativo, você pode acessar a documentação da API através do Swagger. Abra o seu navegador e acesse o seguinte URL:
 
