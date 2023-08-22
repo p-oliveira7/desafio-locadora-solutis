@@ -68,8 +68,8 @@ O projeto está estruturado da seguinte forma:
 ## Dependências
 
 O arquivo `pom.xml` especifica as dependências do projeto. As principais dependências utilizadas são:
-Spring Boot: O projeto está sendo construído usando o framework Spring Boot, que é uma estrutura para simplificar o desenvolvimento de aplicativos Java.
 
+- `Spring Boot`: O projeto está sendo construído usando o framework Spring Boot, que é uma estrutura para simplificar o desenvolvimento de aplicativos Java.
 - `Spring Boot Starter Data JPA`: Essa dependência facilita a integração do JPA (Java Persistence API) com o Spring Boot, permitindo a manipulação de dados usando abstrações de alto nível.
 - `Spring Boot Starter Validation`: Essa dependência fornece suporte para validação de dados em seu aplicativo, garantindo que os dados de entrada estejam corretos e coerentes.
 - `Spring Boot Starter Web`: Essa dependência oferece suporte ao desenvolvimento de aplicativos da web usando o Spring MVC (Model-View-Controller) no contexto do Spring Boot.
