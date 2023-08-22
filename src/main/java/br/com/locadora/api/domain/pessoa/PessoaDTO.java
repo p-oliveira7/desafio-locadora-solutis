@@ -38,8 +38,6 @@ public record PessoaDTO (
         } else {
             return null;
         }
-
-
         try {
             LocalDate dataDeNascimento = converterData(this.dataDeNascimento);
             pessoa.setDataDeNascimento(dataDeNascimento);

@@ -1,6 +1,5 @@
 package br.com.locadora.api.domain.carro;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter

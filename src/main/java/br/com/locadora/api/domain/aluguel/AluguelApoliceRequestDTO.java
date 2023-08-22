@@ -4,7 +4,6 @@ import br.com.locadora.api.domain.apolice.ApoliceSeguroRequestDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -17,8 +16,24 @@ public record AluguelApoliceRequestDTO(
         Date dataDevolucao,
         @NotNull
         @Valid
-        ApoliceSeguroRequestDTO apolice,
-        @NotNull
-        Long idCarro
+        ApoliceSeguroRequestDTO apolice
 ) {
+        @Override
+        public Calendar dataPedido() {
+                return dataPedido;
+        }
+
+        @Override
+        public Date dataEntrega() {
+                return dataEntrega;
+        }
+
+        @Override
+        public Date dataDevolucao() {
+                return dataDevolucao;
+        }
+
+        public ApoliceSeguroRequestDTO getApoliceSeguro() {
+                return this.apolice;
+        }
 }

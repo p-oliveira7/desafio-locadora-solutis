@@ -1,6 +1,5 @@
 package br.com.locadora.api.domain.apolice;
 
-import br.com.locadora.api.domain.aluguel.Aluguel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,10 +18,41 @@ public class ApoliceSeguro {
 
     private Boolean protecaoRoubo;
 
-    public ApoliceSeguro(ApoliceSeguroRequestDTO dados){
-        this.valorFranquia = dados.valorFranquia();
+    public ApoliceSeguro(ApoliceSeguroRequestDTO dados) {
         this.protecaoTerceiro = dados.protecaoTerceiro();
         this.protecaoCausaNatural = dados.protecaoCausaNatural();
         this.protecaoRoubo = dados.protecaoRoubo();
+
+    }
+    public BigDecimal calcularValorFranquia(BigDecimal valorTotalAluguel) {
+        BigDecimal porcentagem = BigDecimal.ZERO;
+
+        if (protecaoTerceiro) {
+            porcentagem = porcentagem.add(BigDecimal.valueOf(0.01));
+        }
+        if (protecaoCausaNatural) {
+            porcentagem = porcentagem.add(BigDecimal.valueOf(0.02));
+        }
+        if (protecaoRoubo) {
+            porcentagem = porcentagem.add(BigDecimal.valueOf(0.05));
+        }
+
+        BigDecimal valorFranquiaCalculado = valorTotalAluguel.multiply(porcentagem);
+        this.valorFranquia = valorFranquiaCalculado;
+        return valorFranquiaCalculado;
+    }
+
+
+
+    public void atualizarInformacoes(ApoliceSeguroRequestDTO dados) {
+        if (dados.protecaoTerceiro() != null) {
+            this.protecaoTerceiro = dados.protecaoTerceiro();
+        }
+        if (dados.protecaoCausaNatural() != null) {
+            this.protecaoCausaNatural = dados.protecaoCausaNatural();
+        }
+        if (dados.protecaoRoubo() != null) {
+            this.protecaoRoubo = dados.protecaoRoubo();
+        }
     }
 }

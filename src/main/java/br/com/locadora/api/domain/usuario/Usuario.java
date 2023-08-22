@@ -27,18 +27,34 @@ public class Usuario implements UserDetails {
 
     private String senha;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "pessoa_id")
-//    private Pessoa pessoa;
+    @Column(name = "user_type")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public Usuario(String email, String senha) {
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
+
+    public Usuario(String email, String senha, Role role) {
         this.email = email;
         this.senha = senha;
+        this.role = role;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.role == null) {
+            // Definindo "ROLE_USER" quando o papel não é especificado
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        } else if (this.role == Role.ADMIN) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else {
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
     }
 
     @Override

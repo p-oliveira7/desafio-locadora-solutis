@@ -13,13 +13,16 @@ public record CarroDTO(
     @NotNull
     String cor,
     @NotNull
- BigDecimal valorDiaria,
+    BigDecimal valorDiaria,
     @NotNull
     Categoria categoria,
-
-    Acessorio acessorio,
     @NotNull
-    ModeloCarro descricao,
+    String acessorio,
     @NotNull
-    Fabricante nome){
+    String descricao,
+    @NotNull
+    String nome,
+    @NotNull
+    String imagePath
+){
 }

@@ -5,8 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public record ListarCarrinhoDTO(
-        String id,
+        Long id,
         String placa,
+        String imagePath,
         Calendar dataPedido,
         Date dataEntrega,
 
@@ -18,6 +19,9 @@ public record ListarCarrinhoDTO(
 
         Boolean protecaoCausaNatural,
 
-        Boolean protecaoRoubo)
+        Boolean protecaoRoubo,
+        BigDecimal valorTotal
+)
+
 {}
 
