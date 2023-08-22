@@ -3,7 +3,9 @@ package br.com.locadora.api.mappers.impl;
 import br.com.locadora.api.domain.pessoa.Pessoa;
 import br.com.locadora.api.domain.pessoa.PessoaResponseDTO;
 import br.com.locadora.api.mappers.PessoaMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PessoaMapperImpl implements PessoaMapper {
 
     @Override
