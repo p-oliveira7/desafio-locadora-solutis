@@ -1,4 +1,5 @@
 package br.com.locadora.api.domain.pessoa;
+
 import br.com.locadora.api.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,8 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING,
-        name = "tipo")
+
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter
 @Setter

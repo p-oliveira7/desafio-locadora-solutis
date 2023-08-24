@@ -26,30 +26,35 @@ public class PessoaService implements PessoaServiceInterface {
     private UsuarioRepository usuarioRepository;
 
     private PessoaMapper pessoaMapper;
+
     @Override
-    @Transactional(readOnly = true)
-    public Page<PessoaResponseDTO> listarPessoas(Pageable pageable) {
-        Page<Pessoa> pessoasPage = pessoaRepository.findAll(pageable);
-
+    public Page<PessoaResponseDTO> listarPessoas(Usuario user, Pageable pageable) {
+        Page<Pessoa> pessoasPage = pessoaRepository.findByUsuario(user, pageable);
         Page<PessoaResponseDTO> pessoasResponsePage = pessoasPage.map(pessoaMapper::toDto);
-
         return pessoasResponsePage;
     }
+
     @Override
     @Transactional
     public void cadastrarPessoa(@NotNull @Valid PessoaDTO pessoaDTO, Usuario user) {
         Pessoa pessoa = pessoaDTO.dtoToEntity();
 
         if (pessoa != null) {
+            // Verificar se já existe uma pessoa com o mesmo CPF
+            Optional<Pessoa> pessoaExistente = pessoaRepository.findByCpf(pessoa.getCpf());
+            if (pessoaExistente.isPresent()) {
+                throw new IllegalArgumentException("Já existe uma pessoa cadastrada com este CPF.");
+            }
+
             pessoaRepository.save(pessoa);
             user.setPessoa(pessoa);
-            usuarioRepository.save(user);// Persiste a entidade no banco de dados
+            usuarioRepository.save(user); // Persiste a entidade no banco de dados
         } else {
             throw new IllegalArgumentException("A conversão do DTO para entidade Pessoa falhou.");
         }
     }
 
-
+@Override
     public void deletarPessoaPorCPF(String cpf) {
         Optional<Pessoa> pessoaExistente = pessoaRepository.findByCpf(cpf);
 
@@ -101,32 +106,7 @@ public class PessoaService implements PessoaServiceInterface {
             throw new EntityNotFoundException("Pessoa não encontrada!");
         }
     }
-   /* @Override
-    @Transactional
-    public void atualizarPessoa(Usuario user, @Valid PessoaDTO pessoaDTO) {
-        Optional<Pessoa> pessoaExistente = pessoaRepository.findById(user.getPessoa().getId());
 
-        if (pessoaExistente.isPresent()) {
-            Pessoa pessoaAtualizada = pessoaDTO.dtoToEntity(); // Supondo que esse método converte DTO para entidade
-            if (pessoaAtualizada != null) {
-                pessoaAtualizada.setId(pessoaExistente.get().getId());
-
-                // Atualizar campos da pessoa existente com os valores da pessoa atualizada
-                pessoaExistente.get().setNome(pessoaAtualizada.getNome());
-                pessoaExistente.get().setDataDeNascimento(pessoaAtualizada.getDataDeNascimento());
-                pessoaExistente.get().setSexo(pessoaAtualizada.getSexo());
-                pessoaExistente.get().setNumeroCNH(pessoaAtualizada.getNumeroCNH());
-
-                // ... Considerando que o CPF é válido e é único por pessoa, não há como alterar.
-
-                pessoaRepository.save(pessoaExistente.get());
-            } else {
-                throw new IllegalArgumentException("A atualização não gerou uma pessoa válida.");
-            }
-        } else {
-            throw new EntityNotFoundException("Pessoa não encontrada!");
-        }
-    }*/
 
 }
 

@@ -21,8 +21,10 @@ public record PessoaDTO (
     String cpf,
     @NotBlank
     String sexo,
+
     @Pattern(regexp = "\\d{6}", message = "A matrícula deve conter exatamente 6 dígitos")
     String matricula,
+    @NotBlank
     @Pattern(regexp = "\\d{11}", message = "O número da CNH deve conter exatamente 11 dígitos")
     String numeroCNH
 ) {
