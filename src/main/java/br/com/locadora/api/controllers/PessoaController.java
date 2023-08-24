@@ -55,12 +55,13 @@ public class PessoaController {
     }
 
     @Operation(summary = "Atualizar uma pessoa")
-    @PutMapping("/pessoas")
+    @PutMapping("/pessoas/{cpf}")
     public ResponseEntity<ResponseMessage> atualizarPessoa(
             @RequestBody @Valid PessoaDTO pessoaAtualizada,
+            @PathVariable String cpf,
             @AuthenticationPrincipal Usuario user) {
         try {
-            pessoaService.atualizarPessoa(user, pessoaAtualizada);
+            pessoaService.atualizarPessoa(cpf, user, pessoaAtualizada);
             return ResponseEntity.ok(new ResponseMessage("Cadastro atualizado com sucesso."));
         } catch (Exception e) {
             logger.error("Erro ao atualizar informações da pessoa: " + e.getMessage());

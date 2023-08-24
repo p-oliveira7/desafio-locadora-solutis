@@ -49,35 +49,85 @@ public class PessoaService implements PessoaServiceInterface {
         }
     }
 
-    @Override
+
     public void deletarPessoaPorCPF(String cpf) {
         Optional<Pessoa> pessoaExistente = pessoaRepository.findByCpf(cpf);
+
         if (pessoaExistente.isPresent()) {
             Pessoa pessoa = pessoaExistente.get();
-                pessoaRepository.delete(pessoa);
-                return;
 
+            // Verifique se a pessoa está associada a algum usuário
+            if (pessoa.getUsuario() != null) {
+                // Se a pessoa estiver associada a um usuário, remova a associação
+                Usuario usuario = pessoa.getUsuario();
+                usuario.setPessoa(null);
+                usuarioRepository.save(usuario);
+            }
+
+            pessoaRepository.delete(pessoa);
+            return;
         }
+
         throw new EntityNotFoundException("Pessoa não encontrada!");
     }
 
-
     @Override
+    public void atualizarPessoa(String cpf, Usuario user, @Valid PessoaDTO pessoaDTO) {
+        Optional<Pessoa> pessoaExistente = pessoaRepository.findByCpf(cpf);
+
+        if (pessoaExistente.isPresent()) {
+            Pessoa pessoa = pessoaExistente.get();
+
+            // Verifique se a pessoa está associada ao usuário autenticado
+            if (pessoa.getUsuario().equals(user)) {
+                Pessoa pessoaAtualizada = pessoaDTO.dtoToEntity();
+                if (pessoaAtualizada != null) {
+                    pessoaAtualizada.setId(pessoa.getId());
+
+                    // Atualize os campos da pessoa existente com os valores da pessoa atualizada
+                    pessoa.setNome(pessoaAtualizada.getNome());
+                    pessoa.setCpf(pessoaAtualizada.getCpf());
+                    pessoaExistente.get().setSexo(pessoaAtualizada.getSexo());
+                    pessoaExistente.get().setNumeroCNH(pessoaAtualizada.getNumeroCNH());
+
+                    pessoaRepository.save(pessoa);
+                } else {
+                    throw new IllegalArgumentException("A atualização não gerou uma pessoa válida.");
+                }
+            } else {
+                throw new IllegalStateException("A pessoa não está associada ao usuário autenticado.");
+            }
+        } else {
+            throw new EntityNotFoundException("Pessoa não encontrada!");
+        }
+    }
+   /* @Override
     @Transactional
     public void atualizarPessoa(Usuario user, @Valid PessoaDTO pessoaDTO) {
         Optional<Pessoa> pessoaExistente = pessoaRepository.findById(user.getPessoa().getId());
 
         if (pessoaExistente.isPresent()) {
+            Pessoa pessoaAtualizada = pessoaDTO.dtoToEntity(); // Supondo que esse método converte DTO para entidade
+            if (pessoaAtualizada != null) {
+                pessoaAtualizada.setId(pessoaExistente.get().getId());
 
-            Pessoa pessoaAtualizada = pessoaDTO.dtoToEntity();
-            assert pessoaAtualizada != null;
-            pessoaAtualizada.setId(pessoaExistente.get().getId());
-            pessoaRepository.save(pessoaAtualizada);
+                // Atualizar campos da pessoa existente com os valores da pessoa atualizada
+                pessoaExistente.get().setNome(pessoaAtualizada.getNome());
+                pessoaExistente.get().setDataDeNascimento(pessoaAtualizada.getDataDeNascimento());
+                pessoaExistente.get().setSexo(pessoaAtualizada.getSexo());
+                pessoaExistente.get().setNumeroCNH(pessoaAtualizada.getNumeroCNH());
 
+                // ... Considerando que o CPF é válido e é único por pessoa, não há como alterar.
+
+                pessoaRepository.save(pessoaExistente.get());
+            } else {
+                throw new IllegalArgumentException("A atualização não gerou uma pessoa válida.");
+            }
         } else {
             throw new EntityNotFoundException("Pessoa não encontrada!");
         }
-    }
+    }*/
+
 }
 
 

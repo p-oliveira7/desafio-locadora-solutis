@@ -11,5 +11,5 @@ public interface PessoaServiceInterface {
 
     void deletarPessoaPorCPF(String cpf);
 
-    void atualizarPessoa(Usuario user, PessoaDTO pessoaDTO);
+    void atualizarPessoa(String cpf, Usuario user, PessoaDTO pessoaDTO);
 }

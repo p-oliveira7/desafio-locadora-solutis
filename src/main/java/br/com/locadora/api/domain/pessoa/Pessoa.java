@@ -1,4 +1,5 @@
 package br.com.locadora.api.domain.pessoa;
+import br.com.locadora.api.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,9 @@ public abstract class Pessoa {
     private Sexo sexo;
     private String matricula;
     private String numeroCNH;
+
+    @OneToOne(mappedBy = "pessoa")
+    private Usuario usuario;
 
     public abstract void atualizar(PessoaDTO pessoaAtualizada);
 
