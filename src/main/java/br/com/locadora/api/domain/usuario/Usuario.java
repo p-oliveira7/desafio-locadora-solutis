@@ -31,6 +31,7 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Getter
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pessoa_id")
     private Pessoa pessoa;
