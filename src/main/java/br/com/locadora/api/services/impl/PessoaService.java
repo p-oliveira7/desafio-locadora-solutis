@@ -48,20 +48,19 @@ public class PessoaService implements PessoaServiceInterface {
             throw new IllegalArgumentException("A conversão do DTO para entidade Pessoa falhou.");
         }
     }
-    @Override
-    @Transactional
-    public void deletarPessoa(Usuario user) {
-        Optional<Pessoa> pessoaExistente = pessoaRepository.findById(user.getPessoa().getId());
-        if (pessoaExistente.isPresent()) {
-            // Atualiza o registro correspondente na tabela usuarios
-            user.setPessoa(null);
-            usuarioRepository.save(user);
 
-            pessoaRepository.delete(pessoaExistente.get());
-            return;
+    @Override
+    public void deletarPessoaPorCPF(String cpf) {
+        Optional<Pessoa> pessoaExistente = pessoaRepository.findByCpf(cpf);
+        if (pessoaExistente.isPresent()) {
+            Pessoa pessoa = pessoaExistente.get();
+                pessoaRepository.delete(pessoa);
+                return;
+
         }
         throw new EntityNotFoundException("Pessoa não encontrada!");
     }
+
 
     @Override
     @Transactional

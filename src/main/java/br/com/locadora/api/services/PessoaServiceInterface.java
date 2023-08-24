@@ -9,7 +9,7 @@ public interface PessoaServiceInterface {
 
     void cadastrarPessoa(PessoaDTO pessoaDTO, Usuario user);
 
-    void deletarPessoa(Usuario user);
+    void deletarPessoaPorCPF(String cpf);
 
     void atualizarPessoa(Usuario user, PessoaDTO pessoaDTO);
 }

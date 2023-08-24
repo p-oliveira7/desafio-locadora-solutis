@@ -69,16 +69,18 @@ public class PessoaController {
     }
 
     @Operation(summary = "Deletar uma pessoa por CPF")
-    @DeleteMapping("/pessoas")
-    public ResponseEntity<ResponseMessage> deletarPessoa(
+    @DeleteMapping("/pessoas/{cpf}")
+    public ResponseEntity<ResponseMessage> deletarPessoaPorCPF(
             @Parameter(description = "CPF da pessoa a ser deletada", required = true)
-            @AuthenticationPrincipal Usuario user) {
+            @PathVariable String cpf) {
         try {
-            pessoaService.deletarPessoa(user);
+            pessoaService.deletarPessoaPorCPF(cpf);
             return ResponseEntity.ok(new ResponseMessage("Pessoa deletada com sucesso."));
         } catch (Exception e) {
             logger.error("Erro ao deletar pessoa: " + e.getMessage());
             return ResponseEntity.badRequest().body(new ResponseMessage("Erro ao deletar pessoa."));
         }
     }
+
+
 }
