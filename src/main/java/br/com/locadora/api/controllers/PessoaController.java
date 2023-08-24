@@ -28,7 +28,19 @@ public class PessoaController {
     @Autowired
     private PessoaServiceInterface pessoaService;
 
-    @Operation(summary = "Obter todas as pessoas")
+    @Operation(summary = "Obter todas as pessoas do usuário")
+    @GetMapping("/pessoas")
+    public ResponseEntity<Page<PessoaResponseDTO>> findAll(@AuthenticationPrincipal Usuario user, Pageable pageable) {
+        try {
+            Page<PessoaResponseDTO> pessoasDTOPage = pessoaService.listarPessoas(user, pageable);
+            return ResponseEntity.ok(pessoasDTOPage);
+        } catch (Exception e) {
+            logger.error("Erro ao obter todas as pessoas: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /*@Operation(summary = "Obter todas as pessoas")
     @GetMapping("/pessoas")
     public ResponseEntity<Page<PessoaResponseDTO>> findAll(Pageable pageable) {
         try {
@@ -38,7 +50,7 @@ public class PessoaController {
             logger.error("Erro ao obter todas as pessoas: " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
-    }
+    }*/
 
     @Operation(summary = "Cadastrar uma nova pessoa")
     @PostMapping("/pessoas")
