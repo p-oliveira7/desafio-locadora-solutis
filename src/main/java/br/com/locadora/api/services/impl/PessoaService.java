@@ -78,13 +78,13 @@ public class PessoaService implements PessoaServiceInterface {
         if (pessoaExistente.isPresent()) {
             Pessoa pessoa = pessoaExistente.get();
 
-            // Verifique se a pessoa está associada ao usuário autenticado
+            // Verifica se a pessoa está associada ao usuário autenticado
             if (pessoa.getUsuario().equals(user)) {
                 Pessoa pessoaAtualizada = pessoaDTO.dtoToEntity();
                 if (pessoaAtualizada != null) {
                     pessoaAtualizada.setId(pessoa.getId());
 
-                    // Atualize os campos da pessoa existente com os valores da pessoa atualizada
+                    // Atualiza os campos da pessoa existente com os valores da pessoa atualizada
                     pessoa.setNome(pessoaAtualizada.getNome());
                     pessoa.setCpf(pessoaAtualizada.getCpf());
                     pessoaExistente.get().setSexo(pessoaAtualizada.getSexo());
